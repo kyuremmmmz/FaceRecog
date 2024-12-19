@@ -43,7 +43,7 @@ class _LandingscreenState extends State<Landingscreen> {
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 ),
-              ), 
+              ),
               callback: ()=>Navigator.pushNamed(context, '/login'), 
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(300, 50),

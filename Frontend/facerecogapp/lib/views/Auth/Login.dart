@@ -1,3 +1,4 @@
+import 'package:facerecogapp/widgets/Buttons/LoginButton.dart';
 import 'package:facerecogapp/widgets/InputFields/email.dart';
 import 'package:facerecogapp/widgets/InputFields/password.dart';
 import 'package:flutter/material.dart';
@@ -66,6 +67,29 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       ),
                     
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Loginbutton(
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(350, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                        ),
+                        backgroundColor: const Color.fromARGB(255, 67, 52, 209)
+                      ), buttonLabel: const Text('Login',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ), 
+                    callback: (){
+                        if (_form.currentState!.validate()) {
+                          debugPrint('bisaya');
+                        }
+                      }
+                    )
                 ],
               ),
             ),
