@@ -1,3 +1,5 @@
+import 'package:facerecogapp/widgets/InputFields/email.dart';
+import 'package:facerecogapp/widgets/InputFields/password.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -8,21 +10,71 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _form = GlobalKey<FormState>();
+  final passswordController = TextEditingController();
+  @override
+  void dispose() {
+    super.dispose();
+    passswordController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Login'),
       ),
       body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              
-            ],
-          ),
-        )
-      ),
+          child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Student Login',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Form(
+              key: _form,
+              child: Column(
+                children: [
+                  Email(
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  passwordTextField(
+                      text: 'Password',
+                      password: passswordController,
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'Please enter a password';
+                        }
+                        return null;
+                      },
+                      ),
+                    
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+          ],
+        ),
+      )),
     );
   }
 }
