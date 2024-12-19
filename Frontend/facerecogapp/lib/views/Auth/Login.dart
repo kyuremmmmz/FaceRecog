@@ -81,17 +81,31 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white,
-                        fontWeight: FontWeight.bold
+                        fontWeight: FontWeight.w600
                       ),
                     ), 
                     callback: (){
                         if (_form.currentState!.validate()) {
-                          debugPrint('bisaya');
+                          debugPrint('test');
                         }
                       }
                     )
                 ],
               ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              child: const Text("Don't have an account? Sign up",
+              style: TextStyle(
+                color: Colors.blue,
+                fontSize: 16
+              ),
+              ),
+              onTap: (){
+                Navigator.pushNamed(context, '/signup');
+              },
             ),
             const SizedBox(
               height: 50,
