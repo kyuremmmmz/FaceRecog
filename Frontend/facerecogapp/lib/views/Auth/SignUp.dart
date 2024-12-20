@@ -27,6 +27,7 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Signup'),
       ),
@@ -39,13 +40,47 @@ class _SignupScreenState extends State<SignupScreen> {
               'Student Sign Up',
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
             ),
+            const SizedBox(
+              height: 20,
+            ),
             Form(
               key: _key,
               child: Column(
                 children: [
-                  Plaintext(
+                    Plaintext(
+                        inputDecoration: const InputDecoration(
+                          labelText: 'Enter your name ex(Last name, Given Name, Middle Initial.)',
+                          floatingLabelStyle: TextStyle(
+                            color: Colors.black
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.black
+                            )
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.black
+                            )
+                            )
+                          ),
+                        validator: (value) {
+                          if (value) {
+                            if (value.toString().isEmpty) {
+                              return 'Please enter your name';
+                            }
+                          }
+                          return null;
+                        },
+                        controller: _emailController,
+                        type: TextInputType.name
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Plaintext(
                       inputDecoration: const InputDecoration(
-                        labelText: 'Enter your name',
+                        labelText: 'Enter your email address',
                         floatingLabelStyle: TextStyle(
                           color: Colors.black
                         ),
@@ -63,13 +98,13 @@ class _SignupScreenState extends State<SignupScreen> {
                       validator: (value) {
                         if (value) {
                           if (value.toString().isEmpty) {
-                            return 'Please enter your name';
+                            return 'Please enter your email address';
                           }
                         }
                         return null;
                       },
                       controller: _emailController,
-                      type: TextInputType.text
+                      type: TextInputType.emailAddress
                     )
                 ],
               ),
