@@ -1,5 +1,6 @@
 /// CameraScreen.dart
 import 'package:camera/camera.dart';
+import 'package:facerecogapp/controllers/CameraControllers.dart';
 import 'package:flutter/material.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -11,15 +12,13 @@ class CameraScreen extends StatefulWidget {
 }
 
 class _CameraScreenState extends State<CameraScreen> {
-  late CameraController _cameraController;
-
+  final CameraControllers controller = CameraControllers();
   late Future<void> cameraValue;
-
+  late CameraController _cameraController;
   @override
   void initState() {
     super.initState();
-    _cameraController = CameraController(widget.cameras[0], ResolutionPreset.high);
-    cameraValue = _cameraController.initialize();
+    controller.getCameraControllers(widget.cameras[0]);
   }
 
   @override
@@ -31,7 +30,9 @@ class _CameraScreenState extends State<CameraScreen> {
               future: cameraValue,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  return CameraPreview(_cameraController);
+                  return Container(
+                    child: CameraPreview(_cameraController),
+                  );
                 } else {
                   return Center(
                     child: CircularProgressIndicator(),
