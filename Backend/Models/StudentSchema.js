@@ -5,18 +5,12 @@
         firstName: {
             type: String,
             required: true,
-            validate: {
-                validator: (value) => /^[a-zA-Z]+$/.test(value),
-                message: 'First name must only contain alphabetical characters.'
-            },
+            
         },
         lastName: {
             type: String,
             required: true,
-            validate: {
-                validator: (value) => /^[a-zA-Z]+$/.test(value),
-                message: 'Last name must only contain alphabetical characters.'
-            },
+            
         },
         middleInitial: {
             type: String,

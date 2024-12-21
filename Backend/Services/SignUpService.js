@@ -5,16 +5,16 @@ const Register = async (data) => {
     try {
         
 
-    const { firstName, lastName, middleName, studentD, yearBlock, email, password } = data;
+    const { firstName, lastName, middleInitial, studentID, block, email, password } = data;
 
         const hashPass = await bycrypt.hash(password, 10);
 
         const user = new Students({
             firstName,
             lastName,
-            middleInitial: middleName,
-            studentID: studentD,
-            block: yearBlock,
+            middleInitial,
+            studentID,
+            block,
             email,
             password: hashPass
         });

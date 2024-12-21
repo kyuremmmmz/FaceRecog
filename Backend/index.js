@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Router = require('./Routes/api');
 require('dotenv').config();
-
+const cors = require('cors');
 const app = express();
 const port = 3000;
 
@@ -20,9 +20,10 @@ const connect = async () => {
 
 app.use(express.json()); 
 app.use('/', Router);
-
+app.use(cors)
 connect();
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`The app listening on port ${port}`);
 });
+
