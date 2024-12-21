@@ -1,4 +1,6 @@
+import 'package:camera/camera.dart';
 import 'package:facerecogapp/utils/Validatos.dart';
+import 'package:facerecogapp/views/Auth/Camera.dart';
 import 'package:facerecogapp/widgets/Buttons/LoginButton.dart';
 import 'package:facerecogapp/widgets/InputFields/plaintext.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +21,19 @@ class _SignupScreenState extends State<SignupScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final phoneController = TextEditingController();
-  Validatos? emailValidator;
+  final student_id = TextEditingController();
+  late List<CameraDescription> cameras;
+
+  @override
+  void initState() {
+    super.initState();
+    initializeCamera();
+  }
+
+  Future<void> initializeCamera() async {
+    cameras = await availableCameras();
+    setState(() {});
+  }
 
   @override
   void dispose() {
@@ -30,23 +44,25 @@ class _SignupScreenState extends State<SignupScreen> {
     _lastName.dispose();
     _firstName.dispose();
     middleInitial.dispose();
+    student_id.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: const Text('Signup'),
+        title: const Text('Registration'),
       ),
       body: Center(
+          child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
-              'Student Sign Up',
+              'Student Registration',
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
             ),
             const SizedBox(
@@ -120,8 +136,52 @@ class _SignupScreenState extends State<SignupScreen> {
                     height: 20,
                   ),
                   Plaintext(
+                      inputDecoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          label: Text('Student ID 2024-2325-3 '),
+                          floatingLabelStyle: TextStyle(color: Colors.black)),
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'please enter your student ID';
+                        }
+                        if (value.toString().length != 13) {
+                          return 'Student ID should be 13 characters long';
+                        }
+                        return null;
+                      },
+                      controller: student_id,
+                      type: TextInputType.text),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Plaintext(
+                      inputDecoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          label: Text('Year Block 3-A '),
+                          floatingLabelStyle: TextStyle(color: Colors.black)),
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'please enter your year block';
+                        }
+                        if (value.toString().length != 3) {
+                          return 'Year block should be 3 characters long';
+                        }
+                        return null;
+                      },
+                      controller: student_id,
+                      type: TextInputType.text),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Plaintext(
                       inputDecoration: const InputDecoration(
-                          labelText: 'Enter your email address',
+                          labelText: 'Email JohnDoe23@example.com',
                           floatingLabelStyle: TextStyle(color: Colors.black),
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black)),
@@ -142,15 +202,43 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  
                   Loginbutton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 67, 52, 209),
+                          backgroundColor:
+                              const Color.fromARGB(255, 67, 52, 209),
                           fixedSize: Size(350, 50),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
-                          )
-                          ),
+                          )),
+                      buttonLabel: const Text(
+                        'Open camera',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      callback: () {
+                        if (cameras.isNotEmpty) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CameraScreen(cameras: cameras),
+                              ),
+                            );
+                          }
+                        }),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Loginbutton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(255, 67, 52, 209),
+                          fixedSize: Size(350, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          )),
                       buttonLabel: const Text(
                         'Sign up as Student',
                         style: TextStyle(
@@ -161,7 +249,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       callback: () {
                         if (_key.currentState!.validate()) {
-                          debugPrint('gago');
+                          debugPrint('test here');
                         }
                       })
                 ],
@@ -169,7 +257,7 @@ class _SignupScreenState extends State<SignupScreen> {
             )
           ],
         ),
-      ),
+      )),
     );
   }
 }
