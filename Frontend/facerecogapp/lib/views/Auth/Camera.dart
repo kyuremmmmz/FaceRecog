@@ -1,46 +1,57 @@
-/// CameraScreen.dart
 import 'package:camera/camera.dart';
-import 'package:facerecogapp/controllers/CameraControllers.dart';
 import 'package:flutter/material.dart';
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({required this.cameras, Key? key}) : super(key: key);
-  final List<CameraDescription> cameras;
+  const CameraScreen({Key? key}) : super(key: key);
 
   @override
   _CameraScreenState createState() => _CameraScreenState();
 }
 
 class _CameraScreenState extends State<CameraScreen> {
-  final CameraControllers controller = CameraControllers();
-  late Future<void> cameraValue;
   late CameraController _cameraController;
+  Future<void>? cameraValue;
+
+  Future<void> initializeCam() async {
+    final cameras = await availableCameras();
+    _cameraController = CameraController(cameras.last, ResolutionPreset.high);
+    cameraValue = _cameraController.initialize();
+    await cameraValue;
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
-    controller.getCameraControllers(widget.cameras[0]);
+    initializeCam();
+  }
+
+  @override
+  void dispose() {
+    _cameraController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          FutureBuilder(
+      body: cameraValue == null
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : FutureBuilder(
               future: cameraValue,
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return Container(
-                    child: CameraPreview(_cameraController),
-                  );
+                if (snapshot.connectionState == ConnectionState.done &&
+                    _cameraController.value.isInitialized) {
+                  return CameraPreview(_cameraController);
                 } else {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
-              })
-        ],
-      ),
+              },
+            ),
     );
   }
 }

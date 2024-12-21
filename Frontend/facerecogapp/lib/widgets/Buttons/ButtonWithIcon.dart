@@ -1,31 +1,31 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
-class Loginbutton extends StatefulWidget {
+class Buttonwithicon extends StatefulWidget {
   late ButtonStyle style;
   late Text buttonLabel;
   late Icon? icon;
   late VoidCallback callback;
-  Loginbutton({
+  Buttonwithicon({
     super.key,
-    this.icon,
     required this.style,
     required this.buttonLabel,
+    this.icon,
     required this.callback,
   });
 
   @override
-  State<Loginbutton> createState() => _LoginbuttonState();
+  State<Buttonwithicon> createState() => _ButtonwithiconState();
 }
 
-class _LoginbuttonState extends State<Loginbutton> {
+class _ButtonwithiconState extends State<Buttonwithicon> {
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: widget.callback,
-      style: widget.style,
-      child: widget.buttonLabel,
-    );
+    return ElevatedButton.icon(
+        style: widget.style,
+        icon: widget.icon,
+        onPressed: widget.callback, 
+        label: widget.buttonLabel
+        );
   }
 }

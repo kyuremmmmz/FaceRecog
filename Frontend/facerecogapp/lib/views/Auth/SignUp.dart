@@ -1,7 +1,9 @@
 import 'package:camera/camera.dart';
 import 'package:facerecogapp/utils/Validatos.dart';
 import 'package:facerecogapp/views/Auth/Camera.dart';
+import 'package:facerecogapp/widgets/Buttons/ButtonWithIcon.dart';
 import 'package:facerecogapp/widgets/Buttons/LoginButton.dart';
+import 'package:facerecogapp/widgets/InputFields/password.dart';
 import 'package:facerecogapp/widgets/InputFields/plaintext.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +24,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final _confirmPasswordController = TextEditingController();
   final phoneController = TextEditingController();
   final student_id = TextEditingController();
+  final yearBlock = TextEditingController();
   late List<CameraDescription> cameras;
 
   @override
@@ -174,7 +177,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         }
                         return null;
                       },
-                      controller: student_id,
+                      controller: yearBlock,
                       type: TextInputType.text),
                   const SizedBox(
                     height: 20,
@@ -198,36 +201,73 @@ class _SignupScreenState extends State<SignupScreen> {
                         return null;
                       },
                       controller: _emailController,
-                      type: TextInputType.emailAddress),
+                      type: TextInputType.emailAddress
+                      ),
                   const SizedBox(
                     height: 20,
                   ),
-                  Loginbutton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 67, 52, 209),
-                          fixedSize: Size(350, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )),
-                      buttonLabel: const Text(
-                        'Open camera',
-                        style: TextStyle(
+                  passwordTextField(
+                    text: 'Password', 
+                    password: _passwordController, 
+                    validator: (value){
+                      if (value.toString().isEmpty) {
+                        return 'Password is required';
+                      }
+                      if (value.toString().length < 8) {
+                        return 'Password should be at least 8 characters long';
+                      }
+                      return null;
+                    }
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    passwordTextField(
+                      text: 'Confirm Password',
+                      password: _confirmPasswordController,
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'Please confirm your password';
+                        }
+                        if (_confirmPasswordController.text == _passwordController.text) {
+                          return null;
+                        }else{
+                          return 'Passwords do not match';
+                        }
+                      }),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Buttonwithicon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 67, 52, 209),
+                      fixedSize: Size(350, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      )
+                    ), 
+                    icon: Icon(
+                      Icons.face_6_sharp,
+                      color: Colors.white,
+                    ),
+                    buttonLabel: const Text('Scan',
+                    style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
-                      ),
-                      callback: () {
-                        if (cameras.isNotEmpty) {
+                      ), 
+                    callback: (){
+                      if (cameras.isNotEmpty) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => CameraScreen(cameras: cameras),
+                                builder: (context) => CameraScreen(),
                               ),
                             );
                           }
-                        }),
+                    }),
+                        
                   const SizedBox(
                     height: 20,
                   ),
