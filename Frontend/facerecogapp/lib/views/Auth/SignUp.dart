@@ -101,6 +101,25 @@ class _SignupScreenState extends State<SignupScreen> {
                     height: 20,
                   ),
                   Plaintext(
+                      inputDecoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          label: Text('Enter your last name'),
+                          floatingLabelStyle: TextStyle(color: Colors.black)),
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'Last name is required';
+                        }
+                        return null;
+                      },
+                      controller: _lastName,
+                      type: TextInputType.name),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Plaintext(
                       inputDecoration: const InputDecoration(
                           labelText: 'Enter your email address',
                           floatingLabelStyle: TextStyle(color: Colors.black),
@@ -123,10 +142,23 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(
                     height: 20,
                   ),
+                  
                   Loginbutton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue),
-                      buttonLabel: const Text('Sign up as Student'),
+                          backgroundColor: const Color.fromARGB(255, 67, 52, 209),
+                          fixedSize: Size(350, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          )
+                          ),
+                      buttonLabel: const Text(
+                        'Sign up as Student',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
                       callback: () {
                         if (_key.currentState!.validate()) {
                           debugPrint('gago');
