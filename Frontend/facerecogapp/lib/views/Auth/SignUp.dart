@@ -1,3 +1,4 @@
+import 'package:facerecogapp/utils/Validatos.dart';
 import 'package:facerecogapp/widgets/Buttons/LoginButton.dart';
 import 'package:facerecogapp/widgets/InputFields/plaintext.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final phoneController = TextEditingController();
+  Validatos? emailValidator;
 
   @override
   void dispose() {
@@ -56,8 +58,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 children: [
                   Plaintext(
                       inputDecoration: const InputDecoration(
-                          labelText:
-                              'Enter your first name',
+                          labelText: 'Enter your first name',
                           floatingLabelStyle: TextStyle(color: Colors.black),
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black)),
@@ -77,37 +78,28 @@ class _SignupScreenState extends State<SignupScreen> {
                     height: 20,
                   ),
                   Plaintext(
-                    inputDecoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.black
-                        )
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black)
-                      ),
-                      label: Text('Enter your middle initial'),
-                      floatingLabelStyle: TextStyle(
-                        color: Colors.black
-                      )
-                    ), 
-                    validator: (value){
-                      
+                      inputDecoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          label: Text('Enter your middle initial'),
+                          floatingLabelStyle: TextStyle(color: Colors.black)),
+                      validator: (value) {
                         if (value.toString().isEmpty) {
                           return 'Middle initial is required';
                         }
                         if (value.toString().length > 4 - 1) {
                           return 'Middle initial is above 3 characters only';
                         }
-                      
-                      return null;
-                    }, 
-                    controller: middleInitial, 
-                    type: TextInputType.name
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+
+                        return null;
+                      },
+                      controller: middleInitial,
+                      type: TextInputType.name),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Plaintext(
                       inputDecoration: const InputDecoration(
                           labelText: 'Enter your email address',
@@ -117,28 +109,29 @@ class _SignupScreenState extends State<SignupScreen> {
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black))),
                       validator: (value) {
-                        
-                          if (value.toString().isEmpty) {
-                            return 'Please enter your email address';
-                          }
-                        
+                        final regex = RegExp(
+                            r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+                        if (value.toString().isEmpty) {
+                          return 'please enter your email';
+                        } else if (!regex.hasMatch(value)) {
+                          return 'please enter the valid email';
+                        }
                         return null;
                       },
                       controller: _emailController,
-                      type: TextInputType.emailAddress
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Loginbutton(style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue
-                    ), buttonLabel: const Text('Sign up as Student'), 
-                    callback: (){
-                      if (_key.currentState!.validate()) {
-                        debugPrint('gago');
-                      }
-                    }
-                    )
+                      type: TextInputType.emailAddress),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Loginbutton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue),
+                      buttonLabel: const Text('Sign up as Student'),
+                      callback: () {
+                        if (_key.currentState!.validate()) {
+                          debugPrint('gago');
+                        }
+                      })
                 ],
               ),
             )
