@@ -25,8 +25,19 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
     try {
-        const { email, password } = await req.body;
-        const userData = await LoginUser(email, password)
+        const { email, password } =  req.body;
+        const userData = await LoginUser(email, password);
+
+        if (!userData) {
+            return res.status(401).json({
+                message: "Invalid email or password"
+            });
+        }
+        if (!userData) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
         res.status(200).json({
             message: "User logged in successfully",
             user: userData

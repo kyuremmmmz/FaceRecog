@@ -1,10 +1,4 @@
 const crypto = require('crypto');
+const generateSecretKey = crypto.randomBytes(32).toString('hex');
 
-
-const generateToken = () => {
-    const token = crypto.randomBytes(32).toString('hex');
-    return token;
-}
-
-
-module.exports = {generateToken};
+module.exports = { generateSecretKey: generateSecretKey };
