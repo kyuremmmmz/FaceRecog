@@ -18,9 +18,10 @@ const connect = async () => {
     }
 };
 
-app.use(express.json()); 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use('/', Router);
-app.use(cors)
+app.use(cors());
 connect();
 
 app.listen(port, '0.0.0.0', () => {

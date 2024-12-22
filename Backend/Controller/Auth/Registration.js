@@ -33,14 +33,11 @@ exports.login = async (req, res, next) => {
                 message: "Invalid email or password"
             });
         }
-        if (!userData) {
-            return res.status(404).json({
-                message: "User not found"
-            });
-        }
         res.status(200).json({
             message: "User logged in successfully",
-            user: userData
+            user: userData,
+            email: req.body.email,
+            
         });
     } catch (e) {
         console.error('Error:', e.message);
