@@ -1,3 +1,4 @@
+const { LoginUser } = require("../../Services/LoginService");
 const { Register } = require("../../Services/SignUpService");
 
 
@@ -21,4 +22,22 @@ exports.register = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.login = async (req, res, next) => {
+    try {
+        const { email, password } = await req.body;
+        const userData = await LoginUser(email, password)
+        res.status(200).json({
+            message: "User logged in successfully",
+            user: userData
+        });
+    } catch (e) {
+        console.error('Error:', e.message);
+        res.status(500).json({
+            message: "An error occurred while logging in the user",
+            error: e.message
+        });
+        next(e);
+    }
+}
 
