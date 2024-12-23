@@ -1,6 +1,5 @@
 import 'package:camera/camera.dart';
 import 'package:facerecogapp/controllers/AuthController.dart';
-import 'package:facerecogapp/utils/Validatos.dart';
 import 'package:facerecogapp/views/Auth/Camera.dart';
 import 'package:facerecogapp/widgets/Buttons/ButtonWithIcon.dart';
 import 'package:facerecogapp/widgets/Buttons/LoginButton.dart';
