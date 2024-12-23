@@ -12,7 +12,8 @@ class Registrationsevice {
       String studentID,
       String block,
       String email,
-      String password) async {
+      String password,
+      String imagePath) async {
     final url = await http.post(Uri.parse('$baseUrl/auth/register'),
         headers: {
           'Content-Type': 'application/json',
@@ -25,7 +26,8 @@ class Registrationsevice {
           'studentID': studentID,
           'block': block,
           'email': email,
-          'password': password
+          'password': password,
+          'imagePath': imagePath,
         }));
     if (url.statusCode == 201) {
       return json.decode(url.body);

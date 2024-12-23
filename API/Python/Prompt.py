@@ -44,7 +44,7 @@ def upload_image():
 
     return jsonify({
         "message": result_message,
-        "distance": distance
+        "": distance
     })
 
 if __name__ == '__main__':

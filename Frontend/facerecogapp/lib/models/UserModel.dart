@@ -8,7 +8,7 @@ class Usermodel {
   final String? email;
   final String? studentID;
   final String? password;
-
+  final String? imagePath;
   Usermodel({
     this.firstName,
     this.lastName,
@@ -17,6 +17,7 @@ class Usermodel {
     this.email,
     this.studentID,
     this.password,
+    this.imagePath,
   });
 
   factory Usermodel.fromJson(Map<String, dynamic> json) {
@@ -28,14 +29,13 @@ class Usermodel {
       email: json['email'].toString(),
       studentID: json['studentID'].toString(),
       password: json['password'].toString(),
+      imagePath: json['imagePath'].toString(),
     );
   }
 
   factory Usermodel.fromAuthJson(Map<String, dynamic> json) {
     return Usermodel(
-      email: json['email']?.toString(),
-      firstName: json['firstName'].toString()
-    );
+        email: json['email']?.toString(),
+        firstName: json['firstName'].toString());
   }
-
 }

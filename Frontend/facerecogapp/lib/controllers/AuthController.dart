@@ -15,10 +15,11 @@ class Authcontroller with ChangeNotifier {
     String block,
     String email,
     String password,
+    String imagePath
   ) async {
     try {
       final user = await registration.register(
-          firstName, lastName, middleInitia, studentID, block, email, password);
+          firstName, lastName, middleInitia, studentID, block, email, password, imagePath);
       _usermodel = Usermodel.fromJson(user);
       print("User email: ${_usermodel?.email}");
       notifyListeners();

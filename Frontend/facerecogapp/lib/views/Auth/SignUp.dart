@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:facerecogapp/controllers/AuthController.dart';
 import 'package:facerecogapp/views/Auth/Camera.dart';
+import 'package:facerecogapp/views/TestScreen/Testing.dart';
 import 'package:facerecogapp/widgets/Buttons/ButtonWithIcon.dart';
 import 'package:facerecogapp/widgets/Buttons/LoginButton.dart';
 import 'package:facerecogapp/widgets/InputFields/password.dart';
@@ -242,67 +243,85 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Buttonwithicon(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 67, 52, 209),
-                          fixedSize: Size(350, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )),
-                      icon: Icon(
-                        Icons.face_6_sharp,
-                        color: Colors.white,
-                      ),
-                      buttonLabel: const Text(
-                        'Scan',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      callback: () {
-                        if (cameras.isNotEmpty) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CameraScreen(),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Buttonwithicon(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    const Color.fromARGB(255, 67, 52, 209),
+                                fixedSize: Size(150, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                )),
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
                             ),
-                          );
-                        }
-                      }),
+                            buttonLabel: const Text(
+                              'Back',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            callback: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Testing()));
+                            }),
+                        SizedBox(
+                          width: 50,
+                        ),
+                        Buttonwithicon(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                                fixedSize: Size(150, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                )),
+                            icon: Icon(
+                              Icons.arrow_right_alt,
+                              color: Colors.white,
+                            ),
+                            buttonLabel: const Text(
+                              'Next',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            callback: () {
+                              if (_key.currentState!.validate()) {
+                                if (cameras.isNotEmpty) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CameraScreen(
+                                          firstName: _firstName.text.trim(),
+                                          lastName: _lastName.text.trim(),
+                                          middleInitial:
+                                              middleInitial.text.trim(),
+                                          block: yearBlock.text.trim(),
+                                          email: _emailController.text.trim(),
+                                          studentID: student_id.text.trim(),
+                                          password:
+                                              _passwordController.text.trim()),
+                                    ),
+                                  );
+                                }
+                              }
+                            }),
+                      ],
+                    ),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
-                  Loginbutton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 67, 52, 209),
-                          fixedSize: Size(350, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )),
-                      buttonLabel: const Text(
-                        'Sign up as Student',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      callback: () {
-                        if (_key.currentState!.validate()) {
-                          controller.registerUser(
-                              _firstName.text.trim(),
-                              _lastName.text.trim(),
-                              middleInitial.text.trim(),
-                              student_id.text.trim(),
-                              yearBlock.text.trim(),
-                              _emailController.text.trim(),
-                              _passwordController.text.trim());
-                        }
-                      })
                 ],
               ),
             )
