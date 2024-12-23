@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:facerecogapp/controllers/CameraInit.dart';
 import 'package:flutter/material.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -9,49 +10,47 @@ class CameraScreen extends StatefulWidget {
 }
 
 class _CameraScreenState extends State<CameraScreen> {
-  late CameraController _cameraController;
-  Future<void>? cameraValue;
-
-  Future<void> initializeCam() async {
-    final cameras = await availableCameras();
-    _cameraController = CameraController(cameras.last, ResolutionPreset.high);
-    cameraValue = _cameraController.initialize();
-    await cameraValue;
-    setState(() {});
-  }
+  final Camerainit init = Camerainit();
+  Future<void>? _cameraInitialization;
 
   @override
   void initState() {
     super.initState();
-    initializeCam();
+    _cameraInitialization = init.initializeCamera();
   }
 
   @override
   void dispose() {
-    _cameraController.dispose();
+    init.controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: cameraValue == null
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : FutureBuilder(
-              future: cameraValue,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done &&
-                    _cameraController.value.isInitialized) {
-                  return CameraPreview(_cameraController);
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              },
-            ),
+      body: FutureBuilder(
+        future: _cameraInitialization,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                'Failed to initialize camera: ${snapshot.error}',
+                style: const TextStyle(color: Colors.red),
+              ),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done &&
+              init.controller != null &&
+              init.controller!.value.isInitialized) {
+            return CameraPreview(init.controller!);
+          } else {
+            return const Center(
+              child: Text('Camera not available'),
+            );
+          }
+        },
+      ),
     );
   }
 }

@@ -28,6 +28,8 @@ class _SignupScreenState extends State<SignupScreen> {
   final yearBlock = TextEditingController();
   late List<CameraDescription> cameras;
   final Authcontroller controller = Authcontroller();
+  late CameraController _cameraController;
+  Future<void>? initialization;
   @override
   void initState() {
     super.initState();
@@ -36,6 +38,9 @@ class _SignupScreenState extends State<SignupScreen> {
 
   Future<void> initializeCamera() async {
     cameras = await availableCameras();
+    final firstCam = cameras.first;
+    _cameraController = CameraController(firstCam, ResolutionPreset.high);
+    initialization = _cameraController.initialize();
     setState(() {});
   }
 
