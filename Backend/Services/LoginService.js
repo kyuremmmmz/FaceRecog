@@ -4,10 +4,10 @@ const { generatePayloadKeys } = require('../utils/generatePayloadKeys');
 const LoginUser = async (email, password) => {
     try {
         const user = await Students.findOne({ email: email });
-        
+        console.log('Query Result:', user);
         if (!user) {
-            console.log('404');
-            
+            console.log('404: User not found');
+            return null; 
         }
 
         const passwordValidation = await bcrypt.compare(password, user.password);
@@ -15,12 +15,14 @@ const LoginUser = async (email, password) => {
             console.log('Invalid password');
             return 'Invalid password';
         }
+
         const token = await generatePayloadKeys(user);
         return token;
     } catch (e) {
-        console.log(e.message);
-        
+        console.error('Error in LoginUser:', e.message);
+        return null;
     }
-}
+};
+
 
 module.exports = {LoginUser}

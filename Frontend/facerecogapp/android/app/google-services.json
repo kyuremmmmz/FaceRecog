@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "544015003042",
+    "firebase_url": "https://forbims-a62f7-default-rtdb.firebaseio.com",
+    "project_id": "forbims-a62f7",
+    "storage_bucket": "forbims-a62f7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544015003042:android:25eeca4785992d084ad6fb",
+        "android_client_info": {
+          "package_name": "com.example.facerecogapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "544015003042-0n70qpjvkqmvkj6r8hg6ko93t9napr9s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChw8F1wAGeC83s1lUyTDrhtbsJnwArONc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "544015003042-0n70qpjvkqmvkj6r8hg6ko93t9napr9s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

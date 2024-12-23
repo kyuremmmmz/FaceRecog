@@ -15,20 +15,38 @@ class Authcontroller with ChangeNotifier {
     String block,
     String email,
     String password,
-  )async{
+    String imagePath
+  ) async {
     try {
       final user = await registration.register(
-        firstName, 
-        lastName,
-        middleInitia, 
-        studentID, 
-        block, 
-        email, 
-        password);
+          firstName, lastName, middleInitia, studentID, block, email, password, imagePath);
       _usermodel = Usermodel.fromJson(user);
+      print("User email: ${_usermodel?.email}");
       notifyListeners();
     } on Exception catch (e) {
       print('Error registering user: $e');
     }
   }
+
+  Future<void> loginUser(String email, String password) async {
+  try {
+    final user = await registration.loginUser(email, password);
+    
+    if (user['error'] == true) {
+      print('Login failed: ${user['message']}');
+      return;
+    }
+    if (user['email'] != null) {
+      _usermodel = Usermodel.fromJson(user);
+      print('User email: ${_usermodel?.email}');
+      return;
+    } else {
+      
+    }
+  } catch (e) {
+    print('Error logging in user: $e');
+  }
+}
+
+
 }

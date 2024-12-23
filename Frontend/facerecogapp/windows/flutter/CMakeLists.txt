@@ -107,3 +107,10 @@ add_custom_target(flutter_assemble DEPENDS
   ${CPP_WRAPPER_SOURCES_PLUGIN}
   ${CPP_WRAPPER_SOURCES_APP}
 )
+
+install(
+  FILES ${PROJECT_BUILD_DIR}/../blobs/libtensorflowlite_c-win.dll 
+  DESTINATION ${INSTALL_BUNDLE_DATA_DIR}/../blobs/
+)
+
+

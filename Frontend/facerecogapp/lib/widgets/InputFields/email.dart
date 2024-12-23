@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class Email extends StatefulWidget {
   final FormFieldValidator validator;
-  const Email({super.key, required this.validator});
+  final TextEditingController controller;
+  const Email({super.key, required this.validator, required this.controller});
 
   @override
   State<Email> createState() => _EmailState();
@@ -14,6 +15,7 @@ class _EmailState extends State<Email> {
     return SizedBox(
       width: 350,
       child: TextFormField(
+        controller: widget.controller,
         decoration: const InputDecoration(
           labelText: 'Email',
           floatingLabelStyle: TextStyle(

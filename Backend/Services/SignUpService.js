@@ -5,7 +5,7 @@ const Register = async (data) => {
     try {
         
 
-    const { firstName, lastName, middleInitial, studentID, block, email, password } = data;
+    const { firstName, lastName, middleInitial, studentID, block, email, password, imagePath } = data;
 
         const hashPass = await bycrypt.hash(password, 10);
 
@@ -16,6 +16,7 @@ const Register = async (data) => {
             studentID,
             block,
             email,
+            imagePath,
             password: hashPass
         });
 
