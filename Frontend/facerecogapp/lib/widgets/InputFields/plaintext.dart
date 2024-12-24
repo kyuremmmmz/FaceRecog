@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 class Plaintext extends StatefulWidget {
   final InputDecoration inputDecoration;
-  final FormFieldValidator validator;
+  final FormFieldValidator? validator;
   final TextEditingController controller;
   final TextInputType type;
   const Plaintext({
     super.key,
     required this.inputDecoration,
-    required this.validator,
+    this.validator,
     required this.controller,
     required this.type,
   });

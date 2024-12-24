@@ -1,13 +1,19 @@
-class Aimodel {
-  final num distance;
-  final String? message;
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:typed_data';
 
-  Aimodel({required this.distance, required this.message});
+class Aimodel {
+  final String file1;
+  final String file2;
+
+  Aimodel({
+    required this.file1,
+    required this.file2,
+  });
   
   factory Aimodel.fromJson(Map<String, dynamic> json) {
     return Aimodel(
-      distance: json['distance'],
-      message: json['message'],
+        file1: json['file1'].toString(),
+        file2: json['file2'].toString(),
     );
   }
 }

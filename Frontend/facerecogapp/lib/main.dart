@@ -1,3 +1,4 @@
+import 'package:facerecogapp/controllers/AiController.dart';
 import 'package:facerecogapp/controllers/AuthController.dart';
 import 'package:facerecogapp/views/AppScreens/Welcome.dart';
 import 'package:facerecogapp/views/Auth/LandingScreen.dart';
@@ -21,8 +22,11 @@ class MyWidget extends StatefulWidget {
 class _MyWidgetState extends State<MyWidget> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => Authcontroller(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => Authcontroller()),
+        ChangeNotifierProvider(create: (_) => AiController()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: const Landingscreen(),

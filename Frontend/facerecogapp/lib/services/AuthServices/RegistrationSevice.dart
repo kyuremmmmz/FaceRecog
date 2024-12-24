@@ -54,9 +54,9 @@ class Registrationsevice {
           ));
     if (response.statusCode == 200) {
       final Map<String, dynamic> decodedResponse = json.decode(response.body);
-      print(decodedResponse['email']);
       return {
         'email': decodedResponse['email'],
+        'userResponse' : decodedResponse['user']
         };
     } else {
       return {
