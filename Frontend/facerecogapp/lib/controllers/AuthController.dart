@@ -28,20 +28,21 @@ class Authcontroller with ChangeNotifier {
     }
   }
 
-  Future<void> loginUser(String email, String password) async {
+  Future<void> loginUser(BuildContext context,String email, String password) async {
   try {
     final user = await registration.loginUser(email, password);
     
-    if (user['error'] == true) {
+    if (user['error'] == true || user['userResponse'] == "Invalid password") {
       print('Login failed: ${user['message']}');
       return;
     }
     if (user['email'] != null) {
       _usermodel = Usermodel.fromJson(user);
       print('User email: ${_usermodel?.email}');
+      Navigator.pushNamed(context, '/home');
       return;
     } else {
-      
+      return;
     }
   } catch (e) {
     print('Error logging in user: $e');

@@ -92,14 +92,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       callback: () async {
                         if (_form.currentState!.validate()) {
                           await authControllerProvider.loginUser(
+                            context,
                             _emailController.text.trim(),
                             passswordController.text.trim(),
                           );
-                          if (authControllerProvider.user?.email != null) {
-                            Navigator.pushNamed(context, '/home');
-                          } else {
-                            print("Login failed");
-                          }
+                          
                         }
                       })
                 ],
