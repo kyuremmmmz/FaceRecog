@@ -33,7 +33,7 @@ class Camerainit {
     String password,
   ) async {
     try {
-       final XFile pic = await controller!.takePicture();
+      final XFile pic = await controller!.takePicture();
       await Navigator.push(
           context,
           MaterialPageRoute(
@@ -53,16 +53,17 @@ class Camerainit {
   }
 
   Future<void> takePictureValidation(
-    BuildContext context,
-    Uint8List file
-  ) async {
+      BuildContext context, Uint8List file2) async {
     try {
       final XFile pic = await controller!.takePicture();
+      final Uint8List file = await pic.readAsBytes();
+      final  encode =  base64Encode(file);
       await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => Validateattendance(
-                    imagePath: pic.path, file2: file,
+                    imagePath: file,
+                    file2: file2,
                   )));
     } catch (e) {
       print('Error taking picture: $e');
