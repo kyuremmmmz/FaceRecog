@@ -4,10 +4,8 @@ import os
 
 app = Flask(__name__)
 
-
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 
 model = "Facenet"
 
@@ -26,25 +24,26 @@ def compare_faces(uploaded_image_path, reference_image_path):
 
 @app.route('/upload', methods=['POST'])
 def upload_image():
-   
-    if 'file' not in request.files:
-        return jsonify({"error": "No file part"}), 400
+    if 'file1' not in request.files or 'file2' not in request.files:
+        return jsonify({"error": "Both files are required"}), 400
 
-    file = request.files['file']
+    file1 = request.files['file1']
+    file2 = request.files['file2']
 
-    if file.filename == '':
+    if file1.filename == '' or file2.filename == '':
         return jsonify({"error": "No selected file"}), 400
 
-    uploaded_image_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-    file.save(uploaded_image_path)
-
-    reference_image_path = "me.jpg"
+    uploaded_image_path = os.path.join(app.config['UPLOAD_FOLDER'], file1.filename)
+    reference_image_path = os.path.join(app.config['UPLOAD_FOLDER'], file2.filename)
+    
+    file1.save(uploaded_image_path)
+    file2.save(reference_image_path)
 
     result_message, distance = compare_faces(uploaded_image_path, reference_image_path)
 
     return jsonify({
         "message": result_message,
-        "": distance
+        "distance": distance
     })
 
 if __name__ == '__main__':

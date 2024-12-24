@@ -74,14 +74,20 @@ class _WelcomeState extends State<Welcome> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (imageData != null)
-                Image.memory(imageData)
-              else
-                const Placeholder(
-                    fallbackHeight: 200,
-                    fallbackWidth:
-                        200), 
-
+              imageData != null ? 
+              SizedBox(
+                height: 200,
+                child: Image.memory(imageData),
+              ) :
+              Container(
+                height: 200,
+                child: Center(
+                  child: Text('No Image Found'),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               Plaintext(
                 inputDecoration: InputDecoration(
                   labelText: 'Enter your ID',
