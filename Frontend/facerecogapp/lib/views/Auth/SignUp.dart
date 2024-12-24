@@ -309,8 +309,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                           block: yearBlock.text.trim(),
                                           email: _emailController.text.trim(),
                                           studentID: student_id.text.trim(),
-                                          password:
-                                              _passwordController.text.trim()),
+                                          password: _passwordController.text.trim()),
                                     ),
                                   );
                                 }

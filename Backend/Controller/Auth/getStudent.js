@@ -9,6 +9,9 @@ exports.getImage = async (req, res, next) => {
                 message: "Student not found"
             });
         }
+
+        console.log(student);
+        
         res.status(200).json({
             message: "Image retrieved successfully",
             student: student

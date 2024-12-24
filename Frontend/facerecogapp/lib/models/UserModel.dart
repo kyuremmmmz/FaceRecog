@@ -38,4 +38,11 @@ class Usermodel {
         email: json['email']?.toString(),
         firstName: json['firstName'].toString());
   }
+
+  factory Usermodel.fromID(Map<String, dynamic> json) {
+    return Usermodel(
+      studentID: json['studentID']?.toString(),
+      imagePath: json['imagePath']?.toString() ?? 'default_image_path',
+    );
+  }
 }

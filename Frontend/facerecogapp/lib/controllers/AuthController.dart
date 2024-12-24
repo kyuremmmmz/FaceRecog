@@ -34,12 +34,14 @@ class Authcontroller with ChangeNotifier {
     
     if (user['error'] == true || user['userResponse'] == "Invalid password") {
       print('Login failed: ${user['message']}');
+      notifyListeners();
       return;
     }
     if (user['email'] != null) {
       _usermodel = Usermodel.fromJson(user);
       print('User email: ${_usermodel?.email}');
       Navigator.pushNamed(context, '/home');
+      notifyListeners();
       return;
     } else {
       return;
