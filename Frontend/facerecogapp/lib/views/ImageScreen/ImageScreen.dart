@@ -48,7 +48,7 @@ class _ImagescreenState extends State<Imagescreen> {
             child: Image.file(File(widget.imagePath)),
           ),
           SizedBox(
-              height: 10,
+              height: 500,
               child: Loginbutton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 67, 52, 209),

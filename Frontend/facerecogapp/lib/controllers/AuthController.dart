@@ -21,7 +21,7 @@ class Authcontroller with ChangeNotifier {
       final user = await registration.register(
           firstName, lastName, middleInitia, studentID, block, email, password, imagePath);
       _usermodel = Usermodel.fromJson(user);
-      print("User email: ${_usermodel?.email}");
+      print("User email: $email");
       notifyListeners();
     } on Exception catch (e) {
       print('Error registering user: $e');

@@ -1,18 +1,18 @@
 from flask import Flask, request, jsonify
 from deepface import DeepFace
+import datetime
 import os
+import base64
 import logging
 
 app = Flask(__name__)
 
-# Setup upload folder
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Setup logging
+
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Model to use for face comparison
 model = "Facenet"
 
 def compare_faces(uploaded_image_path, reference_image_path):
@@ -32,23 +32,28 @@ def compare_faces(uploaded_image_path, reference_image_path):
 @app.route('/upload', methods=['POST'])
 def upload_image():
     try:
-        if 'file1' not in request.files or 'file2' not in request.files:
+        data = request.get_json()
+
+        if 'file1' not in data or 'file2' not in data:
             return jsonify({"error": "Both files are required"}), 400
 
-        file1 = request.files['file1']
-        file2 = request.files['file2']
+        file1_data = base64.b64decode(data['file1'])
+        file2_data = base64.b64decode(data['file2'])
+        date = datetime.datetime.now()
+        logging.info(f"Decoded image data: {file1_data[:10]}...{file2_data[:10]}...")
 
-        if file1.filename == '' or file2.filename == '':
-            return jsonify({"error": "No selected file"}), 400
+        uploaded_image_path = os.path.join(app.config['UPLOAD_FOLDER'], f'{date}file1.jpg')
+        reference_image_path = os.path.join(app.config['UPLOAD_FOLDER'], f'{date}file2.jpg')
 
-        # Save the uploaded files
-        uploaded_image_path = os.path.join(app.config['UPLOAD_FOLDER'], file1.filename)
-        reference_image_path = os.path.join(app.config['UPLOAD_FOLDER'], file2.filename)
-        
-        file1.save(uploaded_image_path)
-        file2.save(reference_image_path)
+        if not os.path.exists(app.config['UPLOAD_FOLDER']):
+            os.makedirs(app.config['UPLOAD_FOLDER'])
 
-        # Perform face comparison
+        with open(uploaded_image_path, 'wb') as f1:
+            f1.write(file1_data)
+
+        with open(reference_image_path, 'wb') as f2:
+            f2.write(file2_data)
+
         result_message, distance = compare_faces(uploaded_image_path, reference_image_path)
         logging.info(f"Comparison result: {result_message}, Distance: {distance}")
 
@@ -62,9 +67,5 @@ def upload_image():
         return jsonify({"error": "Internal server error"}), 500
 
 if __name__ == '__main__':
-    # Create upload folder if it doesn't exist
-    if not os.path.exists(UPLOAD_FOLDER):
-        os.makedirs(UPLOAD_FOLDER)
+    app.run(debug=True, host='0.0.0.0', port=5000)
 
-    # Run the Flask app
-    app.run(debug=True)
