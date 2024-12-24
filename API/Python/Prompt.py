@@ -40,7 +40,8 @@ def upload_image():
     file2.save(reference_image_path)
 
     result_message, distance = compare_faces(uploaded_image_path, reference_image_path)
-
+    print(distance)
+    print(result_message)
     return jsonify({
         "message": result_message,
         "distance": distance

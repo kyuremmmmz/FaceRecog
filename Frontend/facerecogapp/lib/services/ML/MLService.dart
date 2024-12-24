@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 
@@ -41,7 +42,7 @@ class MLService {
   }
 
   Future<Map<String, dynamic>> predictImage(
-      num destination, String message) async {
+      Uint8List file1, Uint8List file2) async {
     final url = Uri.parse('$baseUrl/upload');
     final response = await http.post(url,
         headers: {
@@ -49,14 +50,15 @@ class MLService {
           'Accept': 'application/json',
         },
         body: json.encode({
-          'destination': destination,
-          'message': message,
+          'file1': file1,
+          'file2': file2,
         }));
     if (response.statusCode == 200) {
       final Map<String, dynamic> decodedMessage = json.decode(response.body);
-      print(decodedMessage['distance']);
+      print(decodedMessage['message']);
       return {
-        'message': decodedMessage,
+        'message': decodedMessage['message'],
+        'predictions': decodedMessage['distance'],
       };
     } else {
       return {'error': true, 'message': 'Failed to predict image: $response'};

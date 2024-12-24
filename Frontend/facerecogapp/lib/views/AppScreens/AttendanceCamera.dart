@@ -1,9 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:camera/camera.dart';
 import 'package:facerecogapp/controllers/CameraInit.dart';
 import 'package:flutter/material.dart';
 
 class Attendancecamera extends StatefulWidget {
-  const Attendancecamera({super.key});
+  final Uint8List file1;
+  const Attendancecamera({super.key, required this.file1});
 
   @override
   State<Attendancecamera> createState() => _AttendancecameraState();
@@ -53,6 +56,12 @@ class _AttendancecameraState extends State<Attendancecamera> {
             );
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          init.takePictureValidation(context, widget.file1);
+        },
+        child: const Icon(Icons.camera_alt),
       ),
     );
   }

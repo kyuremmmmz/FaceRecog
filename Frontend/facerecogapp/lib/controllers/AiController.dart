@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:facerecogapp/models/AIModel.dart';
 import 'package:facerecogapp/models/UserModel.dart';
@@ -11,11 +12,10 @@ class AiController with ChangeNotifier {
   Usermodel? get user => _usermodel;
   Aimodel? get aiModel => _aimodel;
   final MLService mlService = MLService();
-  Future<void> predictImage(num distance, String message) async {
+  Future<void> predictImage(Uint8List file1, Uint8List file2) async {
     try {
-      final machine = await mlService.predictImage(distance, message);
+      final machine = await mlService.predictImage(file1, file2);
       _aimodel = Aimodel.fromJson(machine);
-      print('Distance: ${_aimodel?.distance}');
       notifyListeners();
       return;
     } on Exception catch (e) {
