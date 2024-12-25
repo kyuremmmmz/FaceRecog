@@ -5,7 +5,6 @@ import 'package:facerecogapp/controllers/AiController.dart';
 import 'package:facerecogapp/controllers/AuthController.dart';
 import 'package:facerecogapp/views/AppScreens/AttendanceCamera.dart';
 import 'package:facerecogapp/widgets/Buttons/ButtonWithIcon.dart';
-import 'package:facerecogapp/widgets/Buttons/LoginButton.dart';
 import 'package:facerecogapp/widgets/NavigationDrawer/Drawers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +24,7 @@ class _WelcomeState extends State<Welcome> {
   late CameraController _cameraController;
   Future<void>? initialization;
   String? image;
-  int _currentIndex = 0; // Track the current tab index
+  int _currentIndex = 0;
 
   Future<void> initializeCamera() async {
     cameras = await availableCameras();
@@ -61,7 +60,7 @@ class _WelcomeState extends State<Welcome> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _currentIndex = index; // Update the selected tab index
+      _currentIndex = index;
     });
   }
 
@@ -162,7 +161,7 @@ class _WelcomeState extends State<Welcome> {
                     childAspectRatio: 1,
                   ),
                   shrinkWrap: true,
-                  itemCount: 6, // Updated to match the 6 cards
+                  itemCount: 6,
                   itemBuilder: (context, index) {
                     String title;
                     IconData icon;
