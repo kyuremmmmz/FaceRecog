@@ -27,7 +27,6 @@ exports.login = async (req, res, next) => {
     try {
         const { email, password } =  req.body;
         const userData = await LoginUser(email, password);
-
         if (!userData) {
             return res.status(401).json({
                 message: "Invalid email or password"

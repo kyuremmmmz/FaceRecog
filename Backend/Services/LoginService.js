@@ -1,6 +1,7 @@
 const Students = require('../Models/StudentSchema');
 const bcrypt = require('bcrypt');
 const { generatePayloadKeys } = require('../utils/generatePayloadKeys');
+const Token = require('../Models/TokenSchemas');
 const LoginUser = async (email, password) => {
     try {
         const user = await Students.findOne({ email: email });
@@ -17,9 +18,23 @@ const LoginUser = async (email, password) => {
         }
 
         const token = await generatePayloadKeys(user);
-        return token;
+        const newToken = new Token({
+            token: token,
+            studentID: user.studentID
+        });
+        return {token, newToken};
     } catch (e) {
         console.error('Error in LoginUser:', e.message);
+        return null;
+    }
+};
+
+const LogoutUser = async (token) => {
+    try {
+        console.log('Logging out user');
+        return 'User logged out';
+    } catch (e) {
+        console.error('Error in LogoutUser:', e.message);
         return null;
     }
 };
