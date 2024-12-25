@@ -29,7 +29,7 @@ app.use(express.urlencoded({
 }));
 app.use('/', Router);
 app.use(cors());
-app.use(
+const sessions = app.use(
     session({
         secret: process.env.SESSION_SECRET,
         resave: false,
@@ -41,6 +41,8 @@ app.use(
         }
     })
 )
+console.log(sessions);
+
 
 app.use(cookie(process.env.SESSION_SECRET))
 connect();

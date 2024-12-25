@@ -24,8 +24,8 @@ const LoginUser = async (email, password) => {
             token: token,
             studentID: hashIt
         });
-        await newToken.save();
-        return {token, newToken};
+        const savedTokelog = await newToken.save();
+        return { token, savedTokelog };
     } catch (e) {
         console.error('Error in LoginUser:', e.message);
         return null;

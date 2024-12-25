@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             _emailController.text.trim(),
                             passswordController.text.trim(),
                           );
-                          
+                          Navigator.pushNamed(context, '/home');
                         }
                       })
                 ],

@@ -4,7 +4,7 @@ import datetime
 import os
 import base64
 import logging
-
+import uuid
 app = Flask(__name__)
 
 UPLOAD_FOLDER = 'uploads'
@@ -42,8 +42,8 @@ def upload_image():
         date = datetime.datetime.now()
         logging.info(f"Decoded image data: {file1_data[:10]}...{file2_data[:10]}...")
 
-        uploaded_image_path = os.path.join(app.config['UPLOAD_FOLDER'], f'{date}file1.jpg')
-        reference_image_path = os.path.join(app.config['UPLOAD_FOLDER'], f'{date}file2.jpg')
+        uploaded_image_path = os.path.join(app.config['UPLOAD_FOLDER'], f'{uuid.uuid4()}.jpg')
+        reference_image_path = os.path.join(app.config['UPLOAD_FOLDER'], f'{uuid.uuid4()}file2.jpg')
 
         if not os.path.exists(app.config['UPLOAD_FOLDER']):
             os.makedirs(app.config['UPLOAD_FOLDER'])
