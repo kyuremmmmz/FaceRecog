@@ -60,7 +60,6 @@ class MLService {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> decodedMessage = json.decode(response.body);
-        print(decodedMessage['message']);
         return {
           'message': decodedMessage['message'],
           'distance': decodedMessage['distance'],

@@ -32,10 +32,12 @@ exports.login = async (req, res, next) => {
                 message: "Invalid email or password"
             });
         }
+        
         res.status(200).json({
             message: "User logged in successfully",
             user: userData,
             email: req.body.email,
+            data: userData.users,
         });
     } catch (e) {
         console.error('Error:', e.message);
@@ -46,4 +48,5 @@ exports.login = async (req, res, next) => {
         next(e);
     }
 }
+
 

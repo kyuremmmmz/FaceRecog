@@ -1,16 +1,15 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:camera/camera.dart';
 import 'package:facerecogapp/controllers/AiController.dart';
 import 'package:facerecogapp/controllers/AuthController.dart';
 import 'package:facerecogapp/views/AppScreens/AttendanceCamera.dart';
 import 'package:facerecogapp/widgets/Buttons/ButtonWithIcon.dart';
 import 'package:facerecogapp/widgets/Buttons/LoginButton.dart';
-import 'package:facerecogapp/widgets/InputFields/plaintext.dart';
 import 'package:facerecogapp/widgets/NavigationDrawer/Drawers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class Welcome extends StatefulWidget {
   const Welcome({super.key});
@@ -26,19 +25,25 @@ class _WelcomeState extends State<Welcome> {
   late CameraController _cameraController;
   Future<void>? initialization;
   String? image;
+  int _currentIndex = 0; // Track the current tab index
 
   Future<void> initializeCamera() async {
     cameras = await availableCameras();
-    final firstCam = cameras[1];
-    _cameraController = CameraController(firstCam, ResolutionPreset.high);
-    initialization = _cameraController.initialize();
-    setState(() {}); 
+    if (cameras.isNotEmpty) {
+      final firstCam = cameras[1];
+      _cameraController = CameraController(firstCam, ResolutionPreset.high);
+      initialization = _cameraController.initialize();
+      setState(() {});
+    } else {
+      print("No cameras available");
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
     _idController.dispose();
+    _cameraController.dispose();
   }
 
   @override
@@ -54,13 +59,32 @@ class _WelcomeState extends State<Welcome> {
     });
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _currentIndex = index; // Update the selected tab index
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<Authcontroller>(context);
     final aiProvider = Provider.of<AiController>(context);
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     String? base64Image = aiProvider.user?.imagePath;
     Uint8List? imageData;
+    Uint8List? image;
+    String? base64 = provider.user?.imagePath;
+
+    try {
+      if (base64 != null && base64.isNotEmpty) {
+        String clean = base64.replaceFirst('data:image/jpeg;base64,', '');
+        image = base64Decode(clean);
+      }
+    } catch (e) {
+      print('Error decoding image: $e');
+      image = null;
+    }
+
     try {
       if (base64Image != null && base64Image.isNotEmpty) {
         String cleanedBase64String =
@@ -73,98 +97,214 @@ class _WelcomeState extends State<Welcome> {
     }
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
-        title: const Text('Home'),
-        leading: Builder(builder: (context) {
-          return IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          );
-        }),
+        title: const Text('Home',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 24,
+          color: Colors.white,
+        ),),
+        backgroundColor: const Color(0xFF1C75BB),
+        actions: [
+          Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                child: CircleAvatar(
+                  backgroundImage: MemoryImage(image!),
+                ),
+                onTap: () {
+                  _scaffoldKey.currentState?.openDrawer();
+                },
+              )),
+        ],
       ),
       drawer: CustomDrawer(
+        profilePicture: image,
+        name: '${provider.user?.firstName} ${provider.user?.lastName}',
         username: '${provider.user?.email}',
       ),
-      body: Center(
-        child: Form(
-          key: _form,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              imageData != null
-                  ? SizedBox(
-                      height: 200,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 200,
-                            width: 200,
-                            child: Image.memory(
-                              imageData,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF1C75BB), Color(0xFF0A509F)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                image.isNotEmpty
+                    ? CircleAvatar(
+                        radius: 60,
+                        backgroundImage: MemoryImage(image),
+                      )
+                    : const CircleAvatar(
+                        radius: 60,
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.person,
+                          size: 50,
+                          color: Colors.blue,
+                        ),
                       ),
-                    )
-                  : Container(
-                      height: 200,
-                      child: Center(
-                        child: Text('No Image Found'),
-                      ),
-                    ),
-              const SizedBox(
-                height: 20,
-              ),
-              Plaintext(
-                inputDecoration: InputDecoration(
-                  labelText: 'Enter your ID',
-                  floatingLabelStyle: TextStyle(color: Colors.black),
-                  border: OutlineInputBorder(),
-                  focusColor: Colors.black,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
+                const SizedBox(height: 20),
+                const SizedBox(height: 20),
+                GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 15,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: 1,
                   ),
-                  suffixIcon: Icon(Icons.search),
+                  shrinkWrap: true,
+                  itemCount: 6, // Updated to match the 6 cards
+                  itemBuilder: (context, index) {
+                    String title;
+                    IconData icon;
+                    switch (index) {
+                      case 0:
+                        title = 'Appeals';
+                        icon = Icons.warning;
+                        break;
+                      case 1:
+                        title = 'Grades';
+                        icon = Icons.grade;
+                        break;
+                      case 2:
+                        title = 'Schedule';
+                        icon = Icons.schedule;
+                        break;
+                      case 3:
+                        title = 'Tuition';
+                        icon = Icons.monetization_on;
+                        break;
+                      case 4:
+                        title = 'Subjects';
+                        icon = Icons.subject;
+                        break;
+                      case 5:
+                        title = 'Enlist';
+                        icon = Icons.assignment;
+                        break;
+                      default:
+                        title = 'Unknown';
+                        icon = Icons.help;
+                        break;
+                    }
+                    return GestureDetector(
+                      onTap: () {
+                        print('Tapped on $title');
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 6,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              icon,
+                              size: 40,
+                              color: Colors.blue,
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              title,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
-                controller: _idController,
-                type: TextInputType.text,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Loginbutton(
-                style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(350, 50),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    backgroundColor: const Color.fromARGB(255, 67, 52, 209)),
-                buttonLabel: const Text(
-                  'Submit',
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600),
+                const SizedBox(height: 30),
+                Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Student ID: ${provider.user!.studentID}',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          'Block: ${provider.user!.block}',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        StreamBuilder<DateTime>(
+                          stream: Stream.periodic(
+                              Duration(seconds: 1), (_) => DateTime.now()),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return Text('Loading...');
+                            }
+                            final formattedDate =
+                                DateFormat('yyyy-MM-dd HH:mm:ss')
+                                    .format(snapshot.data!);
+                            return Text(
+                              'Date Today: $formattedDate',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                callback: () {
-                  _submit(_idController.text.trim());
-                },
-              ),
-              Buttonwithicon(
+                const SizedBox(height: 20),
+                Buttonwithicon(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      fixedSize: Size(150, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      )),
+                    backgroundColor: Colors.blue,
+                    fixedSize: Size(250, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 5,
+                  ),
                   icon: Icon(
-                    Icons.arrow_right_alt,
+                    Icons.calendar_month,
                     color: Colors.white,
                   ),
                   buttonLabel: const Text(
-                    'Next',
+                    'Attendance',
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -172,18 +312,20 @@ class _WelcomeState extends State<Welcome> {
                     ),
                   ),
                   callback: () {
-                      if (cameras.isNotEmpty) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Attendancecamera(file1: imageData!,
-                          ),
-                        )
-                        );
-                      }
-                    
-                  }),
-            ],
+                    if (cameras.isNotEmpty && image != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Attendancecamera(file1: image!),
+                        ),
+                      );
+                    } else {
+                      print("Image or camera not available");
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

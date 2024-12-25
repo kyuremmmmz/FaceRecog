@@ -20,17 +20,19 @@ const LoginUser = async (email, password) => {
         }
 
         const token = await generatePayloadKeys(user);
+        const users = await user;
         const newToken = new Token({
             token: token,
             studentID: hashIt
         });
-        await newToken.save();
-        return {token, newToken};
+        const savedTokelog = await newToken.save();
+        return { token, savedTokelog, users };
     } catch (e) {
         console.error('Error in LoginUser:', e.message);
         return null;
     }
 };
+
 
 const LogoutUser = async (studentID) => {
     try {

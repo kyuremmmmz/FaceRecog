@@ -12,14 +12,23 @@ class AiController with ChangeNotifier {
   Usermodel? get user => _usermodel;
   Aimodel? get aiModel => _aimodel;
   final MLService mlService = MLService();
-  Future<void> predictImage(Uint8List file1, Uint8List file2) async {
+  Future<Map<String, dynamic>> predictImage(
+      Uint8List file1, Uint8List file2) async {
     try {
       final machine = await mlService.predictImage(file1, file2);
       _aimodel = Aimodel.fromJson(machine);
+      print(aiModel?.distance);
       notifyListeners();
-      return;
+      return {
+        'message': aiModel?.message,
+        'distance': aiModel?.distance,
+      };
     } on Exception catch (e) {
       print('Error predicting image: $e');
+      return {
+        'error': 'Error predicting image.',
+        'message': '',
+      };
     }
   }
 

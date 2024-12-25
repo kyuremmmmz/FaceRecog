@@ -1,6 +1,8 @@
 import 'package:facerecogapp/controllers/AiController.dart';
 import 'package:facerecogapp/controllers/AuthController.dart';
+import 'package:facerecogapp/views/AppScreens/Profiles.dart';
 import 'package:facerecogapp/views/AppScreens/Welcome.dart';
+import 'package:facerecogapp/views/Auth/AuthWrapper.dart';
 import 'package:facerecogapp/views/Auth/LandingScreen.dart';
 import 'package:facerecogapp/views/Auth/Login.dart';
 import 'package:facerecogapp/views/Auth/SignUp.dart';
@@ -29,17 +31,15 @@ class _MyWidgetState extends State<MyWidget> {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: const Landingscreen(),
-        initialRoute: '/landingScreen',
+        home:Authwrapper(),
         routes: {
           '/landingScreen': (context) => const Landingscreen(),
           '/login': (context) => const LoginScreen(),
           '/signup': (context) => const SignupScreen(),
           '/home': (context) => Welcome(),
+          '/profile': (context) => Profiles()
         },
       ),
     );
   }
 }
-
-
