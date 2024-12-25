@@ -5,6 +5,8 @@ const Token = require('../Models/TokenSchemas');
 const LoginUser = async (email, password) => {
     try {
         const user = await Students.findOne({ email: email });
+        const uid = await user.studentID;
+        const hashIt = await bcrypt.hash(uid, 10);
         console.log('Query Result:', user);
         if (!user) {
             console.log('404: User not found');
@@ -20,8 +22,9 @@ const LoginUser = async (email, password) => {
         const token = await generatePayloadKeys(user);
         const newToken = new Token({
             token: token,
-            studentID: user.studentID
+            studentID: hashIt
         });
+        await newToken.save();
         return {token, newToken};
     } catch (e) {
         console.error('Error in LoginUser:', e.message);
@@ -29,9 +32,8 @@ const LoginUser = async (email, password) => {
     }
 };
 
-const LogoutUser = async (token) => {
+const LogoutUser = async (studentID) => {
     try {
-        console.log('Logging out user');
         return 'User logged out';
     } catch (e) {
         console.error('Error in LogoutUser:', e.message);

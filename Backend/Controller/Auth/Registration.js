@@ -25,7 +25,7 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
     try {
-        const { email, password } =  req.body;
+        const { email, password } = req.body;
         const userData = await LoginUser(email, password);
         if (!userData) {
             return res.status(401).json({
@@ -36,7 +36,6 @@ exports.login = async (req, res, next) => {
             message: "User logged in successfully",
             user: userData,
             email: req.body.email,
-            
         });
     } catch (e) {
         console.error('Error:', e.message);
