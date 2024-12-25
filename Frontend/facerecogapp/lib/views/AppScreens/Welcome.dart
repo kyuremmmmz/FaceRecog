@@ -32,7 +32,7 @@ class _WelcomeState extends State<Welcome> {
     final firstCam = cameras[1];
     _cameraController = CameraController(firstCam, ResolutionPreset.high);
     initialization = _cameraController.initialize();
-    setState(() {}); 
+    setState(() {});
   }
 
   @override
@@ -54,17 +54,16 @@ class _WelcomeState extends State<Welcome> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<Authcontroller>(context);
     final aiProvider = Provider.of<AiController>(context);
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     String? base64Image = aiProvider.user?.imagePath;
     Uint8List? imageData;
     try {
       if (base64Image != null && base64Image.isNotEmpty) {
-        String cleanedBase64String =
-            base64Image.replaceFirst('data:image/jpeg;base64,', '');
+        String cleanedBase64String = base64Image.replaceFirst('data:image/jpeg;base64,', '');
         imageData = base64Decode(cleanedBase64String);
       }
     } catch (e) {
@@ -73,94 +72,172 @@ class _WelcomeState extends State<Welcome> {
     }
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: const Text('Home'),
-        leading: Builder(builder: (context) {
-          return IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          );
-        }),
-      ),
-      drawer: CustomDrawer(
-        username: '${provider.user?.email}',
-      ),
-      body: Center(
-        child: Form(
-          key: _form,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              imageData != null
-                  ? SizedBox(
-                      height: 200,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 200,
-                            width: 200,
-                            child: Image.memory(
-                              imageData,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  : Container(
-                      height: 200,
-                      child: Center(
-                        child: Text('No Image Found'),
-                      ),
-                    ),
-              const SizedBox(
-                height: 20,
-              ),
-              Plaintext(
-                inputDecoration: InputDecoration(
-                  labelText: 'Enter your ID',
-                  floatingLabelStyle: TextStyle(color: Colors.black),
-                  border: OutlineInputBorder(),
-                  focusColor: Colors.black,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  suffixIcon: Icon(Icons.search),
-                ),
-                controller: _idController,
-                type: TextInputType.text,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Loginbutton(
-                style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(350, 50),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    backgroundColor: const Color.fromARGB(255, 67, 52, 209)),
-                buttonLabel: const Text(
-                  'Submit',
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600),
-                ),
-                callback: () {
-                  _submit(_idController.text.trim());
+        backgroundColor: const Color(0xFF1C75BB),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              child: IconButton(
+                icon: const Icon(Icons.person, color: Colors.blue),
+                onPressed: () {
+                  Scaffold.of(context).openEndDrawer();
                 },
               ),
-              Buttonwithicon(
+            ),
+          ),
+        ],
+      ),
+      endDrawer: CustomDrawer(
+        username: '${provider.user?.email}',
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF1C75BB), Color(0xFF0A509F)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Display Image if available
+                imageData != null
+                    ? CircleAvatar(
+                        radius: 60,
+                        backgroundImage: MemoryImage(imageData),
+                      )
+                    : const CircleAvatar(
+                        radius: 60,
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.person,
+                          size: 50,
+                          color: Colors.blue,
+                        ),
+                      ),
+                const SizedBox(height: 20),
+
+                // Main action grid buttons
+                GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 15,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: 1,
+                  ),
+                  shrinkWrap: true,
+                  itemCount: 6,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 6,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.money, // Placeholder icon
+                              size: 40,
+                              color: Colors.blue,
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              'Action ${index + 1}',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 30),
+
+                Card(
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      children: [
+                        Plaintext(
+                          inputDecoration: InputDecoration(
+                            labelText: 'Enter your ID',
+                            labelStyle: TextStyle(color: Colors.black),
+                            floatingLabelStyle: TextStyle(color: Colors.black),
+                            border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black),
+                            ),
+                            suffixIcon: Icon(Icons.search, color: Colors.black),
+                          ),
+                          controller: _idController,
+                          type: TextInputType.text,
+                        ),
+                        const SizedBox(height: 20),
+                        Loginbutton(
+                          style: ElevatedButton.styleFrom(
+                            fixedSize: const Size(350, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            backgroundColor: const Color(0xFF4E73DF),
+                          ),
+                          buttonLabel: const Text(
+                            'Submit',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          callback: () {
+                            _submit(_idController.text.trim());
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Buttonwithicon(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      fixedSize: Size(150, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      )),
+                    backgroundColor: Colors.blue,
+                    fixedSize: Size(150, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 5,
+                  ),
                   icon: Icon(
-                    Icons.arrow_right_alt,
+                    Icons.arrow_forward_ios,
                     color: Colors.white,
                   ),
                   buttonLabel: const Text(
@@ -172,18 +249,19 @@ class _WelcomeState extends State<Welcome> {
                     ),
                   ),
                   callback: () {
-                      if (cameras.isNotEmpty) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Attendancecamera(file1: imageData!,
-                          ),
-                        )
-                        );
-                      }
-                    
-                  }),
-            ],
+                    if (cameras.isNotEmpty) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              Attendancecamera(file1: imageData!),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

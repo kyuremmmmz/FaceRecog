@@ -8,7 +8,7 @@ class Authcontroller with ChangeNotifier {
   Usermodel? get user => _usermodel;
   bool _isLoggedIn = false;
   bool get isLoggedIn => _isLoggedIn;
-
+  String? user2;
   Future<void> registerUser(
       String firstName,
       String lastName,
@@ -29,11 +29,9 @@ class Authcontroller with ChangeNotifier {
     }
   }
 
-  Future<void> loginUser(
-      BuildContext context, String email, String password) async {
+  Future<void> loginUser(BuildContext context, String email, String password) async {
     try {
       final user = await registration.loginUser(email, password);
-
       if (user['error'] == true || user['userResponse'] == "Invalid password") {
         print('Login failed: ${user['message']}');
         notifyListeners();
@@ -43,6 +41,7 @@ class Authcontroller with ChangeNotifier {
         _isLoggedIn = true;
         _usermodel = Usermodel.fromJson(user);
         print('User email: ${_usermodel?.email}');
+        print(user['body']);
         notifyListeners();
         return;
       } else {

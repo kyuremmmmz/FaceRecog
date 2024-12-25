@@ -4,8 +4,8 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
 class MLService {
-  final baseUrl = 'http://10.0.2.2:5000';
-  final expressURL = 'http://10.0.2.2:3000';
+  final baseUrl = 'http://192.168.100.7:5000';
+  final expressURL = 'http://192.168.100.7:3000';
   String? image;
 
   Future<Map<String, dynamic>> getImage(String studentID) async {
@@ -60,7 +60,6 @@ class MLService {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> decodedMessage = json.decode(response.body);
-        print(decodedMessage['message']);
         return {
           'message': decodedMessage['message'],
           'distance': decodedMessage['distance'],

@@ -2,18 +2,18 @@
 import 'dart:typed_data';
 
 class Aimodel {
-  final String file1;
-  final String file2;
+  final String message;
+  final String distance;
 
   Aimodel({
-    required this.file1,
-    required this.file2,
+    required this.message,
+    required this.distance,
   });
   
   factory Aimodel.fromJson(Map<String, dynamic> json) {
     return Aimodel(
-        file1: json['file1'].toString(),
-        file2: json['file2'].toString(),
+        message: json['message'].toString(),
+        distance: json['distance'].toString(),
     );
   }
 }

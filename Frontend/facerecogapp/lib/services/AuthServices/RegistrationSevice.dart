@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:facerecogapp/models/UserModel.dart';
 import 'package:http/http.dart' as http;
 
@@ -56,7 +57,8 @@ class Registrationsevice {
       final Map<String, dynamic> decodedResponse = json.decode(response.body);
       return {
         'email': decodedResponse['email'],
-        'userResponse' : decodedResponse['user']
+        'userResponse' : decodedResponse['user'],
+        'body' : decodedResponse
         };
     } else {
       return {
