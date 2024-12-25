@@ -32,19 +32,12 @@ exports.login = async (req, res, next) => {
                 message: "Invalid email or password"
             });
         }
-        const session = req.session = {
-            token: userData.token,
-            studentID: userData.savedTokelog.studentID
-        }
         
         res.status(200).json({
             message: "User logged in successfully",
             user: userData,
             email: req.body.email,
-            cookie: {
-                sessionCookie: session.studentID,
-                studentID: session.token
-            }
+            data: userData.users,
         });
     } catch (e) {
         console.error('Error:', e.message);

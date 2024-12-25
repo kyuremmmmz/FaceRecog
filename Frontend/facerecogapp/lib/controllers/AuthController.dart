@@ -41,7 +41,6 @@ class Authcontroller with ChangeNotifier {
         _isLoggedIn = true;
         _usermodel = Usermodel.fromJson(user);
         print('User email: ${_usermodel?.email}');
-        print(user['body']);
         notifyListeners();
         return;
       } else {
@@ -56,6 +55,7 @@ class Authcontroller with ChangeNotifier {
   Future<void> logoutUser(BuildContext context) async {
     try {
       _isLoggedIn = false;
+      _usermodel = null;
       notifyListeners();
     } catch (e) {
       print('Error logging out user: $e');

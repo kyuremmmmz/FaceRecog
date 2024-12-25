@@ -1,30 +1,36 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:typed_data';
+
+import 'package:facerecogapp/controllers/AuthController.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatelessWidget {
   final String? username;
   final Uint8List? profilePicture;
-
+  final String? name;
   const CustomDrawer({
     Key? key,
     required this.username,
     this.profilePicture,
+    this.name,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<Authcontroller>(context);
     return Drawer(
       child: Column(
         children: [
           UserAccountsDrawerHeader(
             accountName: Text(
-              'Guest',
+              '$name',
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
               ),
             ),
-            accountEmail:  Text('$username'),
+            accountEmail: Text('$username'),
             currentAccountPicture: CircleAvatar(
               backgroundColor: Colors.white,
               backgroundImage:
@@ -45,7 +51,6 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
           ),
-
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 8),
@@ -81,12 +86,12 @@ class CustomDrawer extends StatelessWidget {
                       const Text('Logout', style: TextStyle(color: Colors.red)),
                   onTap: () {
                     Navigator.pop(context);
+                    provider.logoutUser(context);
                   },
                 ),
               ],
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
