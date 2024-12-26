@@ -18,7 +18,6 @@ class Attendancereports extends StatefulWidget {
 class _AttendancereportsState extends State<Attendancereports> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // Sample data for attendance records
   List<Map<String, dynamic>> monthlyData = [
     {'month': 'January', 'attended': 15, 'total': 20, 'year': 2024},
     {'month': 'February', 'attended': 18, 'total': 20, 'year': 2024},

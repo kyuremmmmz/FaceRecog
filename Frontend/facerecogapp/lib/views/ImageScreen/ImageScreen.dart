@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 import 'dart:io';
 
@@ -36,50 +35,91 @@ class _ImagescreenState extends State<Imagescreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text('Image Preview'),
-      ),
-      body: Center(
-          child: Column(
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: 200,
-            child: Image.file(File(widget.imagePath)),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: Colors.black),
+        title: const Text(
+          'Image Preview',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
           ),
-          SizedBox(
-              height: 500,
-              child: Loginbutton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 67, 52, 209),
-                      fixedSize: Size(350, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      )),
-                  buttonLabel: const Text(
-                    'Sign up as Student',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+        ),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 8,
+                    spreadRadius: 2,
+                    offset: const Offset(0, 4),
                   ),
-                  callback: () async{
-                    final bytes = await File(widget.imagePath).readAsBytes(); 
-                    final convertTobase64 = base64Encode(bytes);
-                    controller.registerUser(
-                        widget.firstName,
-                        widget.lastName,
-                        widget.middleInitial,
-                        widget.studentID,
-                        widget.block,
-                        widget.email,
-                        widget.password,
-                        'data:image/jpeg;base64,$convertTobase64'
-                        );
-                  }))
-        ],
-      )),
+                ],
+              ),
+              clipBehavior: Clip.hardEdge,
+              child: Image.file(
+                File(widget.imagePath),
+                width: double.infinity,
+                height: 200,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "Confirm your details below and sign up",
+              style: TextStyle(
+                color: Colors.grey[800],
+                fontSize: 16,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            Loginbutton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 67, 52, 209),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              buttonLabel: const Text(
+                'Sign up as Student',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              callback: () async {
+                final bytes = await File(widget.imagePath).readAsBytes();
+                final convertTobase64 = base64Encode(bytes);
+                controller.registerUser(
+                  widget.firstName,
+                  widget.lastName,
+                  widget.middleInitial,
+                  widget.studentID,
+                  widget.block,
+                  widget.email,
+                  widget.password,
+                  'data:image/jpeg;base64,$convertTobase64',
+                );
+                Navigator.pushNamed(context, '/login');
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
