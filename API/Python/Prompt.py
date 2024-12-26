@@ -39,7 +39,6 @@ def upload_image():
 
         file1_data = base64.b64decode(data['file1'])
         file2_data = base64.b64decode(data['file2'])
-        date = datetime.datetime.now()
         logging.info(f"Decoded image data: {file1_data[:10]}...{file2_data[:10]}...")
 
         uploaded_image_path = os.path.join(app.config['UPLOAD_FOLDER'], f'{uuid.uuid4()}.jpg')

@@ -72,6 +72,14 @@ class CustomDrawer extends StatelessWidget {
                   },
                 ),
                 ListTile(
+                  leading: const Icon(Icons.bar_chart, color: Colors.blue),
+                  title: const Text('Reports'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/reports');
+                  },
+                ),
+                ListTile(
                   leading: const Icon(Icons.settings, color: Colors.blue),
                   title: const Text('Settings'),
                   onTap: () {
@@ -79,6 +87,7 @@ class CustomDrawer extends StatelessWidget {
                     Navigator.pushNamed(context, '/settings');
                   },
                 ),
+
                 const Divider(thickness: 1, color: Colors.grey),
                 ListTile(
                   leading: const Icon(Icons.logout, color: Colors.red),

@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:camera/camera.dart';
+import 'package:custom_accordion/custom_accordion.dart';
 import 'package:facerecogapp/controllers/AiController.dart';
 import 'package:facerecogapp/controllers/AuthController.dart';
 import 'package:facerecogapp/utils/AdaptiveFontSize.dart';
 import 'package:facerecogapp/views/AppScreens/AttendanceCamera.dart';
+import 'package:facerecogapp/widgets/Accordion/Accordion.dart';
 import 'package:facerecogapp/widgets/Buttons/ButtonWithIcon.dart';
 import 'package:facerecogapp/widgets/NavigationDrawer/Drawers.dart';
+import 'package:facerecogapp/widgets/ReusableCodes/Columns.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -21,12 +23,10 @@ class Welcome extends StatefulWidget {
 
 class _WelcomeState extends State<Welcome> {
   final _idController = TextEditingController();
-  final _form = GlobalKey<FormState>();
   late List<CameraDescription> cameras = [];
   late CameraController _cameraController;
   Future<void>? initialization;
   String? image;
-  int _currentIndex = 0;
 
   Future<void> initializeCamera() async {
     cameras = await availableCameras();
@@ -57,12 +57,6 @@ class _WelcomeState extends State<Welcome> {
     await Provider.of<AiController>(context, listen: false).getImage(studentID);
     setState(() {
       image = studentID;
-    });
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _currentIndex = index;
     });
   }
 
@@ -100,13 +94,10 @@ class _WelcomeState extends State<Welcome> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: const Text('Home',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
-          color: Colors.black,
+        title: Icon(
+          Icons.home,
+          size: 30,
         ),
-      ),
         backgroundColor: Colors.white,
         actions: [
           Padding(
@@ -129,10 +120,7 @@ class _WelcomeState extends State<Welcome> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              Colors.white,
-              Colors.white
-            ],
+            colors: [Colors.white, Colors.white],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -153,7 +141,7 @@ class _WelcomeState extends State<Welcome> {
                 ),
                 image.isNotEmpty
                     ? Center(
-                      child: Row(
+                        child: Row(
                         children: [
                           CircleAvatar(
                             radius: 30,
@@ -166,7 +154,8 @@ class _WelcomeState extends State<Welcome> {
                               Text(
                                 'Hi, ${provider.user?.firstName}',
                                 style: TextStyle(
-                                  fontSize: AdaptiveFontSize.getFontSize(context, 17),
+                                  fontSize:
+                                      AdaptiveFontSize.getFontSize(context, 17),
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
@@ -175,20 +164,17 @@ class _WelcomeState extends State<Welcome> {
                               Text(
                                 'Welcome to your class',
                                 style: TextStyle(
-                                  fontSize: AdaptiveFontSize.getFontSize(
+                                    fontSize: AdaptiveFontSize.getFontSize(
                                         context, 15),
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color.fromARGB(255, 96, 196, 209)
-                                    ),
-                                  
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color.fromARGB(
+                                        255, 96, 196, 209)),
                               ),
                             ],
                           )
                         ],
-                      )
-                    )
-                    : 
-                    const CircleAvatar(
+                      ))
+                    : const CircleAvatar(
                         radius: 60,
                         backgroundColor: Colors.white,
                         child: Icon(
@@ -287,20 +273,7 @@ class _WelcomeState extends State<Welcome> {
                   },
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  'Today\'s Attendance',
-                ),
-                Card(
-                  child: Container(
-                    child: ListBody(
-                      children: [
-                        ListTile(
-                          title: Text('First Name: ${provider.user!.firstName}'),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
+                Accordion()
               ],
             ),
           ),
