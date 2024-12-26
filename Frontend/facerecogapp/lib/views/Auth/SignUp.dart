@@ -3,7 +3,6 @@ import 'package:facerecogapp/controllers/AuthController.dart';
 import 'package:facerecogapp/views/Auth/Camera.dart';
 import 'package:facerecogapp/views/TestScreen/Testing.dart';
 import 'package:facerecogapp/widgets/Buttons/ButtonWithIcon.dart';
-import 'package:facerecogapp/widgets/Buttons/LoginButton.dart';
 import 'package:facerecogapp/widgets/InputFields/password.dart';
 import 'package:facerecogapp/widgets/InputFields/plaintext.dart';
 import 'package:flutter/material.dart';

@@ -1,15 +1,18 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
+import 'package:custom_accordion/custom_accordion.dart';
 import 'package:facerecogapp/controllers/AiController.dart';
 import 'package:facerecogapp/controllers/AuthController.dart';
+import 'package:facerecogapp/utils/AdaptiveFontSize.dart';
 import 'package:facerecogapp/views/AppScreens/AttendanceCamera.dart';
+import 'package:facerecogapp/widgets/Accordion/Accordion.dart';
 import 'package:facerecogapp/widgets/Buttons/ButtonWithIcon.dart';
-import 'package:facerecogapp/widgets/Buttons/LoginButton.dart';
 import 'package:facerecogapp/widgets/NavigationDrawer/Drawers.dart';
+import 'package:facerecogapp/widgets/ReusableCodes/Columns.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class Welcome extends StatefulWidget {
   const Welcome({super.key});
@@ -20,12 +23,10 @@ class Welcome extends StatefulWidget {
 
 class _WelcomeState extends State<Welcome> {
   final _idController = TextEditingController();
-  final _form = GlobalKey<FormState>();
   late List<CameraDescription> cameras = [];
   late CameraController _cameraController;
   Future<void>? initialization;
   String? image;
-  int _currentIndex = 0; // Track the current tab index
 
   Future<void> initializeCamera() async {
     cameras = await availableCameras();
@@ -56,12 +57,6 @@ class _WelcomeState extends State<Welcome> {
     await Provider.of<AiController>(context, listen: false).getImage(studentID);
     setState(() {
       image = studentID;
-    });
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _currentIndex = index; // Update the selected tab index
     });
   }
 
@@ -99,13 +94,11 @@ class _WelcomeState extends State<Welcome> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: const Text('Home',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
-          color: Colors.white,
-        ),),
-        backgroundColor: const Color(0xFF1C75BB),
+        title: Icon(
+          Icons.home,
+          size: 30,
+        ),
+        backgroundColor: Colors.white,
         actions: [
           Padding(
               padding: const EdgeInsets.all(8.0),
@@ -127,7 +120,7 @@ class _WelcomeState extends State<Welcome> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF1C75BB), Color(0xFF0A509F)],
+            colors: [Colors.white, Colors.white],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -138,11 +131,49 @@ class _WelcomeState extends State<Welcome> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                const Text(
+                  'Logo',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
                 image.isNotEmpty
-                    ? CircleAvatar(
-                        radius: 60,
-                        backgroundImage: MemoryImage(image),
-                      )
+                    ? Center(
+                        child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundImage: MemoryImage(image),
+                          ),
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Hi, ${provider.user?.firstName}',
+                                style: TextStyle(
+                                  fontSize:
+                                      AdaptiveFontSize.getFontSize(context, 17),
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                              Text(
+                                'Welcome to your class',
+                                style: TextStyle(
+                                    fontSize: AdaptiveFontSize.getFontSize(
+                                        context, 15),
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color.fromARGB(
+                                        255, 96, 196, 209)),
+                              ),
+                            ],
+                          )
+                        ],
+                      ))
                     : const CircleAvatar(
                         radius: 60,
                         backgroundColor: Colors.white,
@@ -152,89 +183,6 @@ class _WelcomeState extends State<Welcome> {
                           color: Colors.blue,
                         ),
                       ),
-                const SizedBox(height: 20),
-                const SizedBox(height: 20),
-                GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 15,
-                    mainAxisSpacing: 20,
-                    childAspectRatio: 1,
-                  ),
-                  shrinkWrap: true,
-                  itemCount: 6, // Updated to match the 6 cards
-                  itemBuilder: (context, index) {
-                    String title;
-                    IconData icon;
-                    switch (index) {
-                      case 0:
-                        title = 'Appeals';
-                        icon = Icons.warning;
-                        break;
-                      case 1:
-                        title = 'Grades';
-                        icon = Icons.grade;
-                        break;
-                      case 2:
-                        title = 'Schedule';
-                        icon = Icons.schedule;
-                        break;
-                      case 3:
-                        title = 'Tuition';
-                        icon = Icons.monetization_on;
-                        break;
-                      case 4:
-                        title = 'Subjects';
-                        icon = Icons.subject;
-                        break;
-                      case 5:
-                        title = 'Enlist';
-                        icon = Icons.assignment;
-                        break;
-                      default:
-                        title = 'Unknown';
-                        icon = Icons.help;
-                        break;
-                    }
-                    return GestureDetector(
-                      onTap: () {
-                        print('Tapped on $title');
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 6,
-                              offset: Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              icon,
-                              size: 40,
-                              color: Colors.blue,
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              title,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
                 const SizedBox(height: 30),
                 Card(
                   elevation: 0,
@@ -324,6 +272,8 @@ class _WelcomeState extends State<Welcome> {
                     }
                   },
                 ),
+                const SizedBox(height: 20),
+                Accordion()
               ],
             ),
           ),

@@ -2,17 +2,16 @@ import 'dart:typed_data';
 import 'package:facerecogapp/controllers/AiController.dart';
 import 'package:facerecogapp/widgets/Buttons/LoginButton.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Validateattendance extends StatefulWidget {
   final Uint8List imagePath;
   final Uint8List file2;
 
   const Validateattendance({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.file2,
-  }) : super(key: key);
+  });
 
   @override
   State<Validateattendance> createState() => _ValidateattendanceState();
