@@ -1,10 +1,11 @@
+
 # Flutter App Architecture Example
 
-This document demonstrates a complete Flutter app architecture that integrates frontend, backend, and state management. The app follows a **clean architecture** approach, ensuring modularity and scalability.
+This document demonstrates a complete Flutter app architecture that integrates frontend, backend, and state management. The app follows a **clean architecture** approach, ensuring modularity and scalability. Additionally, the authentication flow is modified to ensure that once a user is authenticated, they cannot navigate back to the login screen.
 
 ---
 
-## **Directory Structure**
+## Directory Structure
 
 ```plaintext
 lib/
@@ -33,13 +34,13 @@ lib/
 
 ---
 
-## **Code Implementation**
+## Code Implementation
 
-### **1. Models**
+### 1. Models
 Define the `User` data model.
 
-`models/user.dart`:
 ```dart
+// models/user.dart
 class User {
   final String id;
   final String name;
@@ -59,11 +60,11 @@ class User {
 
 ---
 
-### **2. Services**
+### 2. Services
 Create an API service for backend interaction.
 
-`services/api_service.dart`:
 ```dart
+// services/api_service.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -87,11 +88,11 @@ class ApiService {
 
 ---
 
-### **3. Controllers**
+### 3. Controllers
 Manage state using `ChangeNotifier` (Provider pattern).
 
-`controllers/auth_controller.dart`:
 ```dart
+// controllers/auth_controller.dart
 import 'package:flutter/material.dart';
 import '../models/user.dart';
 import '../services/api_service.dart';
@@ -116,11 +117,13 @@ class AuthController with ChangeNotifier {
 
 ---
 
-### **4. Views**
+### 4. Views
 
 #### Login Screen
-`views/login_screen.dart`:
+The login screen where users can enter their credentials.
+
 ```dart
+// views/login_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/auth_controller.dart';
@@ -158,7 +161,8 @@ class LoginScreen extends StatelessWidget {
                     emailController.text,
                     passwordController.text,
                   );
-                  Navigator.pushNamed(context, '/home');
+                  // Prevent navigation back to login screen after login
+                  Navigator.pushReplacementNamed(context, '/home');
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Login failed: $e')),
@@ -176,8 +180,10 @@ class LoginScreen extends StatelessWidget {
 ```
 
 #### Home Screen
-`views/home_screen.dart`:
+The home screen that users will see once logged in.
+
 ```dart
+// views/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/auth_controller.dart';
@@ -199,7 +205,9 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
+                // Log out and navigate to login screen
+                authController._user = null; // Clear user data
+                Navigator.pushReplacementNamed(context, '/login');
               },
               child: const Text('Logout'),
             ),
@@ -213,10 +221,10 @@ class HomeScreen extends StatelessWidget {
 
 ---
 
-### **5. Main Entry Point**
+### 5. Main Entry Point
 
-`main.dart`:
 ```dart
+// main.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'controllers/auth_controller.dart';
@@ -250,10 +258,14 @@ class MyApp extends StatelessWidget {
 
 ---
 
-### **Key Features**
+### Key Features
+
 1. **Separation of Concerns**: Clear distinction between models, views, controllers, and services.
 2. **Scalable Architecture**: Easy to extend as the app grows.
 3. **State Management**: Provider pattern ensures reactivity and performance.
 4. **Backend Integration**: Services layer handles API calls.
+5. **Authentication Flow**: After login, users are redirected to the home screen, and the login screen is no longer accessible without logging out.
 
-This architecture ensures a clean, maintainable, and scalable Flutter app.
+---
+
+This architecture ensures a clean, maintainable, and scalable Flutter app. The login flow is designed to prevent the user from navigating back to the login screen after authentication, by using `Navigator.pushReplacementNamed` for a seamless transition to the home screen.
