@@ -38,7 +38,7 @@ class _LandingscreenState extends State<Landingscreen> {
             ),
             TeacherButton(
               buttonName: const Text(
-                'Student',
+                'Teacher',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -62,7 +62,7 @@ class _LandingscreenState extends State<Landingscreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20))),
                 buttonLabel: const Text(
-                  'Teacher',
+                  'Student',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
