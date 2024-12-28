@@ -8,6 +8,7 @@ import 'package:facerecogapp/views/Auth/AuthWrapper.dart';
 import 'package:facerecogapp/views/Auth/LandingScreen.dart';
 import 'package:facerecogapp/views/Auth/Login.dart';
 import 'package:facerecogapp/views/Auth/SignUp.dart';
+import 'package:facerecogapp/views/WrapperScreens/LoginWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +38,7 @@ class _MyWidgetState extends State<MyWidget> {
         home:Authwrapper(),
         routes: {
           '/landingScreen': (context) => const Landingscreen(),
-          '/login': (context) => const LoginScreen(),
+          '/login': (context) => const Loginwrapper(),
           '/signup': (context) => const SignupScreen(),
           '/home': (context) => Welcome(),
           '/profile': (context) => Profiles(),

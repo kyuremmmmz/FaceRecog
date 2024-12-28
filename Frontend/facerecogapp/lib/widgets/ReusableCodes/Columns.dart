@@ -18,7 +18,6 @@ class _ColumnsState extends State<Columns> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            
             CircleAvatar(
                 backgroundColor: Colors.blue,
                 child: Text(
