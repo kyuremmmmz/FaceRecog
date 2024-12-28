@@ -53,11 +53,10 @@ class Camerainit {
   }
 
   Future<void> takePictureValidation(
-      BuildContext context, Uint8List file2) async {
+      BuildContext context, Uint8List file2,) async {
     try {
       final XFile pic = await controller!.takePicture();
       final Uint8List file = await pic.readAsBytes();
-      final  encode =  base64Encode(file);
       await Navigator.push(
           context,
           MaterialPageRoute(

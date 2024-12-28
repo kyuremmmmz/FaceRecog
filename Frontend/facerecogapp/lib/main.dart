@@ -1,4 +1,5 @@
 import 'package:facerecogapp/controllers/AiController.dart';
+import 'package:facerecogapp/controllers/AttendanceController.dart';
 import 'package:facerecogapp/controllers/AuthController.dart';
 import 'package:facerecogapp/views/AppScreens/Profiles.dart';
 import 'package:facerecogapp/views/AppScreens/Welcome.dart';
@@ -29,6 +30,7 @@ class _MyWidgetState extends State<MyWidget> {
       providers: [
         ChangeNotifierProvider(create: (_) => Authcontroller()),
         ChangeNotifierProvider(create: (_) => AiController()),
+        ChangeNotifierProvider(create: (_)=> AttendanceController())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

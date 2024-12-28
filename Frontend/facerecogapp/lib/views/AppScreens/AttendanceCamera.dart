@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 
 class Attendancecamera extends StatefulWidget {
   final Uint8List file1;
-  const Attendancecamera({super.key, required this.file1});
+  final String? studentID;
+  const Attendancecamera({super.key, required this.file1, this.studentID});
 
   @override
   State<Attendancecamera> createState() => _AttendancecameraState();
@@ -15,8 +16,8 @@ class Attendancecamera extends StatefulWidget {
 class _AttendancecameraState extends State<Attendancecamera> {
   final Camerainit init = Camerainit();
   Future<void>? _cameraInitialization;
-  bool isFaceAligned = false; // Track if face is aligned within the frame
-  bool isStreaming = false; // Prevent multiple streams
+  bool isFaceAligned = false;
+  bool isStreaming = false; 
 
   @override
   void initState() {

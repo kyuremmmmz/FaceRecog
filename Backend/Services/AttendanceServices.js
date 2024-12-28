@@ -17,4 +17,4 @@ const Attend = async (data) => {
     }
 }
 
-module.exports = {Attend} 
+module.exports = {Attend}

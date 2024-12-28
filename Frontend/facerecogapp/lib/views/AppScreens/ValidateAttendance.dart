@@ -1,7 +1,11 @@
 import 'dart:typed_data';
-import 'package:facerecogapp/controllers/AiController.dart';
-import 'package:facerecogapp/widgets/Buttons/LoginButton.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:facerecogapp/controllers/AiController.dart';
+import 'package:facerecogapp/controllers/AttendanceController.dart';
+import 'package:facerecogapp/widgets/Buttons/LoginButton.dart';
+import 'package:facerecogapp/widgets/Modals/BottomModal.dart';
 
 class Validateattendance extends StatefulWidget {
   final Uint8List imagePath;
@@ -20,10 +24,10 @@ class Validateattendance extends StatefulWidget {
 class _ValidateattendanceState extends State<Validateattendance> {
   final AiController controller = AiController();
   bool _isValidating = false;
-  String _result = '';
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<AttendanceController>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Validate Attendance'),
@@ -72,20 +76,20 @@ class _ValidateattendanceState extends State<Validateattendance> {
                           widget.imagePath, widget.file2);
                       setState(() {
                         _isValidating = false;
-                        _result = result['message'];
                       });
+
+                      if (result['message'] == 'Faces match!') {
+                        await BottomModal().modal(context);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Faces do not match!'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
                     },
                   ),
-            const SizedBox(height: 30),
-            if (_result.isNotEmpty)
-              Text(
-                _result,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
           ],
         ),
       ),
