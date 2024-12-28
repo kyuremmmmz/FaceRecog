@@ -15,10 +15,10 @@ class AttendanceService {
             'Accept': 'application/json',
           },
           body: json.encode({
-            "studentId": studentID,
+            "studentID": studentID,
             "date": date,
             "present": present,
-            "subjectCodeAttended": subjectCodeAttended,
+            "subjectCodetAttended": subjectCodeAttended,
           }));
       if (response.statusCode == 200) {
         final Map<String, dynamic> decodedResponse = await json.decode(response.body);

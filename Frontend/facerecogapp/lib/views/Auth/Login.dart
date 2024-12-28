@@ -16,6 +16,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _form = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final passswordController = TextEditingController();
+  bool isLoading = false;
+  Authcontroller? authControllerProvider;
   @override
   void dispose() {
     super.dispose();
@@ -25,7 +27,38 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authControllerProvider = Provider.of<Authcontroller>(context);
+    authControllerProvider = Provider.of<Authcontroller>(context);
+    Future<void> loginUser() async {
+      setState(() {
+        isLoading = true;
+      });
+      try {
+        await authControllerProvider?.loginUser(
+          context,
+          _emailController.text.trim(),
+          passswordController.text.trim(),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Login failed: ${e.toString()}',
+              style: const TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      } finally {
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      }
+    }
+
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -82,8 +115,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               borderRadius: BorderRadius.circular(10)),
                           backgroundColor:
                               const Color.fromARGB(255, 67, 52, 209)),
-                      buttonLabel: const Text(
-                        'Login',
+                      buttonLabel: Text(
+                        isLoading == true ? 'Loading' : 'Login',
                         style: TextStyle(
                             fontSize: 16,
                             color: Colors.white,
@@ -91,11 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       callback: () async {
                         if (_form.currentState!.validate()) {
-                          await authControllerProvider.loginUser(
-                            context,
-                            _emailController.text.trim(),
-                            passswordController.text.trim(),
-                          );
+                          loginUser();
                         }
                       })
                 ],

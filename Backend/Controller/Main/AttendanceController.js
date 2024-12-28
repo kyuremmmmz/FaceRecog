@@ -12,6 +12,8 @@ exports.AttendanceController = async (req, res, next) => {
                 message: 'Student not found'
             });
         }
+        console.log(data);
+        
         res.status(201).json({
             message: "Attendance recorded successfully",
             data: data
@@ -21,5 +23,5 @@ exports.AttendanceController = async (req, res, next) => {
             message: "An error occurred while recording attendance",
             error: e.message
         });
-     }
+    }
 }

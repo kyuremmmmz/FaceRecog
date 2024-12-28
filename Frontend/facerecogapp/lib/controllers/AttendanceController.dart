@@ -13,7 +13,7 @@ class AttendanceController with ChangeNotifier {
           _attendanceModel = AttendanceModel.fromJson(student);
           notifyListeners();
         } catch (e) {
-          
+          print(e);
         }
       }
 }

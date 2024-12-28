@@ -22,7 +22,7 @@ const Register = async (data) => {
 
         const userData = await user.save();
         return userData;
-    } catch (e) {
+    } catch (e) { 
         console.error('Error registering student', e);
         throw e;
     }

@@ -27,7 +27,7 @@ class _ValidateattendanceState extends State<Validateattendance> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<AttendanceController>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Validate Attendance'),

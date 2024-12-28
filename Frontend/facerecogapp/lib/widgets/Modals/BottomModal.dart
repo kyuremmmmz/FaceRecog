@@ -1,7 +1,14 @@
+import 'package:facerecogapp/controllers/AttendanceController.dart';
+import 'package:facerecogapp/views/AppScreens/Welcome.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BottomModal {
-  Future<void> modal(BuildContext context) async{
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController id = TextEditingController();
+  final TextEditingController subject = TextEditingController();
+  final TextEditingController? remarks = TextEditingController();
+  Future<void> modal(BuildContext context) async {
     await showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -11,6 +18,7 @@ class BottomModal {
       ),
       isScrollControlled: true,
       builder: (BuildContext context) {
+        final provider = Provider.of<AttendanceController>(context);
         return Padding(
           padding: EdgeInsets.only(
             left: 20,
@@ -30,6 +38,7 @@ class BottomModal {
               ),
               const SizedBox(height: 20),
               TextField(
+                controller: nameController,
                 decoration: InputDecoration(
                   labelText: 'Full Name',
                   border: OutlineInputBorder(
@@ -39,6 +48,7 @@ class BottomModal {
               ),
               const SizedBox(height: 20),
               TextField(
+                controller: id,
                 decoration: InputDecoration(
                   labelText: 'Teacher ID',
                   border: OutlineInputBorder(
@@ -48,6 +58,17 @@ class BottomModal {
               ),
               const SizedBox(height: 20),
               TextField(
+                controller: subject,
+                decoration: InputDecoration(
+                  labelText: 'Subect Code attended',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: remarks,
                 decoration: InputDecoration(
                   labelText: 'Remarks (Optional)',
                   border: OutlineInputBorder(
@@ -66,8 +87,12 @@ class BottomModal {
                   backgroundColor: Colors.green,
                 ),
                 onPressed: () {
-                  
-                  Navigator.pop(context);
+                  provider.attend(
+                    id.text.trim(), 
+                    DateTime.now().toString(),
+                    'present', subject.text.trim()
+                    );
+                  Navigator.pushNamed(context, '/home');
                 },
                 child: const Text(
                   'Submit',
@@ -82,5 +107,11 @@ class BottomModal {
         );
       },
     );
+  }
+
+  void dispose() {
+    nameController.dispose();
+    id.dispose();
+    subject.dispose();
   }
 }
